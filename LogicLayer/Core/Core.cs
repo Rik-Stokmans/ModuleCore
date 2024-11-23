@@ -1,6 +1,9 @@
-using LogicLayer.Interfaces;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using LogicLayer.Models;
 
 namespace LogicLayer.Core
 {
@@ -22,7 +25,7 @@ namespace LogicLayer.Core
             _initialized = true;
         }
 
-        private static T GetService<T>() where T : class
+        public static T GetService<T>() where T : class
         {
             CheckInit();
 
@@ -33,6 +36,33 @@ namespace LogicLayer.Core
 
             throw new Exception($"Service of type {typeof(T).Name} not registered");
         }
+
+        public static IEnumerable<(Type ServiceType, MethodInfo Method, string HttpVerb)> GetHttpAnnotatedMethods()
+        {
+            CheckInit();
+
+            foreach (var serviceType in Services.Keys)
+            {
+                Console.WriteLine($"Checking Service Type: {serviceType.Name}");
+
+                foreach (var method in serviceType.GetMethods(BindingFlags.Public | BindingFlags.Instance))
+                {
+                    Console.WriteLine($"Checking Method: {method.Name}");
+                    var attribute = method.GetCustomAttribute<HttpMethodAttribute>();
+                    
+                    
+                    
+                    
+                    if (attribute != null)
+                    {
+                        Console.WriteLine($"Discovered Method: {method.Name} with verb: {attribute.Verb}");
+                        yield return (serviceType, method, attribute.Verb);
+                    }
+                }
+            }
+        }
+
+
 
         private static void CheckInit()
         {

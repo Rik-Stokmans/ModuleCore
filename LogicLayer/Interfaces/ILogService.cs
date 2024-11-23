@@ -4,7 +4,11 @@ namespace LogicLayer.Interfaces;
 
 public interface ILogService
 {
-    public Task<OperationResult> Log(LogMessageObject logMessageObject);
+    [HttpMethod("GET")]
+    public OperationResult CreateLog(string message);
     
-    public Task<(OperationResult, List<LogMessageObject>)> GetAll();
+    /*
+    [HttpMethod("GET")]
+    public string GetStatus(dynamic? inputData);
+    */
 }

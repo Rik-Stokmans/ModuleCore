@@ -5,15 +5,10 @@ namespace MockDataLayer.Services;
 
 public class LogMockService : ILogService
 {
-    public Task<OperationResult> Log(LogMessageObject logMessageObject)
+    public OperationResult CreateLog(string message)
     {
-        MockData.LogObjects.Add(logMessageObject);
+        Console.WriteLine($"Log: {message}");
         
-        return Task.FromResult(OperationResult.GetCreated());
-    }
-
-    public Task<(OperationResult, List<LogMessageObject>)> GetAll()
-    {
-        return Task.FromResult((OperationResult.GetSuccess(), MockData.LogObjects));
+        return OperationResult.GetSuccess();
     }
 }
