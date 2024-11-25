@@ -11,4 +11,12 @@ public class LogMockService : ILogService
         
         return OperationResult.GetSuccess();
     }
+
+    public OperationResult CreateLogTwice(string message)
+    {
+        Console.WriteLine($"Log: {message}");
+        Console.WriteLine($"Log: {message}");
+        
+        return OperationResult.GetSuccess();
+    }
 }

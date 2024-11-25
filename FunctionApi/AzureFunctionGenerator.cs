@@ -18,9 +18,13 @@ public static class AzureFunctionGenerator
 
         foreach (var (serviceType, method, verb) in methods)
         {
-            var functionName = $"{serviceType.Name}_{method.Name}";
-            var functionClassName = $"{serviceType.Name}Functions";
+            var functionName = serviceType.Name.StartsWith("I") 
+                ? string.Concat(serviceType.Name.AsSpan(1), "")
+                : serviceType.Name;
 
+            var classname = functionName + method.Name;
+
+            //TODO make the code within the function conform to the method
             // Generate the function code
             var functionCode = $$"""
             using LogicLayer.Core;
@@ -32,21 +36,14 @@ public static class AzureFunctionGenerator
 
             namespace FunctionApi.bin.Debug.net8._0.Generated;
 
-            public class {{functionClassName}}(ILogger<{{functionClassName}}> logger)
+            public class {{classname}}(ILogger<{{classname}}> logger)
             {
-                [Function("{{functionName}}")]
+                [Function("{{method.Name}}")]
                 public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "{{verb.ToLowerInvariant()}}")] HttpRequest req)
                 {
                     logger.LogInformation("C# HTTP trigger function processed a request.");
 
-                    var logMessage = req.Query["message"];
-
-                    if (string.IsNullOrEmpty(logMessage))
-                    {
-                        return new BadRequestObjectResult("Please pass a message on the query string using ?message=<message>");
-                    }
-
-                    var result = Core.GetService<{{serviceType.Name}}>().{{method.Name}}(logMessage);
+                    
 
                     return (result.Code / 100) switch
                     {
@@ -57,9 +54,9 @@ public static class AzureFunctionGenerator
                 }
             }
             """;
-
+            
             // Save the generated file
-            File.WriteAllText($"Generated/{functionClassName}_{method.Name}.cs", functionCode);
+            File.WriteAllText($"Generated/{classname}.cs", functionCode);
 
         }
     }

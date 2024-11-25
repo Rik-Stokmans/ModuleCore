@@ -13,4 +13,13 @@ public static partial class Core
         
         return OperationResult.GetSuccess();
     }
+    
+    public static OperationResult CreateLogTwice(string message)
+    {
+        CheckInit();
+        
+        GetService<ILogService>().CreateLogTwice(message);
+        
+        return OperationResult.GetSuccess();
+    }
 }
