@@ -1,6 +1,9 @@
-using LogicLayer.Interfaces;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using LogicLayer.Models;
 
 namespace LogicLayer.Core
 {
@@ -22,7 +25,7 @@ namespace LogicLayer.Core
             _initialized = true;
         }
 
-        private static T GetService<T>() where T : class
+        public static T GetService<T>() where T : class
         {
             CheckInit();
 
@@ -33,6 +36,36 @@ namespace LogicLayer.Core
 
             throw new Exception($"Service of type {typeof(T).Name} not registered");
         }
+
+        public static IEnumerable<(Type DeclaringType, MethodInfo Method, string HttpVerb)> GetHttpAnnotatedMethods()
+        {
+            CheckInit();
+
+            // Log the start of the method discovery process
+            Console.WriteLine("Starting to scan Core class for methods annotated with HttpMethodAttribute.");
+
+            // Scan for methods within the Core class that are annotated with HttpMethodAttribute
+            var coreType = typeof(Core);
+
+            foreach (var method in coreType.GetMethods(BindingFlags.Public | BindingFlags.Static))
+            {
+                // Log each method being inspected
+                Console.WriteLine($"Inspecting method: {method.Name}");
+
+                var attribute = method.GetCustomAttribute<HttpMethodAttribute>();
+                if (attribute != null)
+                {
+                    // Log when an annotated method is discovered
+                    Console.WriteLine($"Discovered annotated method: {method.Name}, HTTP Verb: {attribute.Verb}");
+
+                    yield return (coreType, method, attribute.Verb);
+                }
+            }
+
+            // Log the end of the discovery process
+            Console.WriteLine("Finished scanning Core class for annotated methods.");
+        }
+
 
         private static void CheckInit()
         {

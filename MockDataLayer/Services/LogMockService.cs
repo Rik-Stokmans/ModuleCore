@@ -5,15 +5,31 @@ namespace MockDataLayer.Services;
 
 public class LogMockService : ILogService
 {
-    public Task<OperationResult> Log(LogMessageObject logMessageObject)
+    public OperationResult CreateLog(LogMessageObject logObject)
     {
-        MockData.LogObjects.Add(logMessageObject);
+        Console.WriteLine($"Log: {logObject.Message} at {logObject.Time}");
         
-        return Task.FromResult(OperationResult.GetCreated());
+        MockData.LogObjects.Add(logObject);
+        
+        return OperationResult.GetSuccess();
     }
 
-    public Task<(OperationResult, List<LogMessageObject>)> GetAll()
+    public OperationResult CreateLogTwice(LogMessageObject logObject)
     {
-        return Task.FromResult((OperationResult.GetSuccess(), MockData.LogObjects));
+        var logObject1 = new LogMessageObject(logObject.Message);
+        Console.WriteLine($"Log: {logObject1.Message} at {logObject1.Time}");
+        
+        var logObject2 = new LogMessageObject(logObject.Message);
+        Console.WriteLine($"Log: {logObject2.Message} at {logObject2.Time}");
+        
+        MockData.LogObjects.Add(logObject1);
+        MockData.LogObjects.Add(logObject2);
+        
+        return OperationResult.GetSuccess();
+    }
+
+    public (OperationResult, List<LogMessageObject>) GetLogs()
+    {
+        return (OperationResult.GetSuccess(), MockData.LogObjects);
     }
 }

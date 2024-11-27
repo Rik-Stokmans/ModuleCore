@@ -4,7 +4,9 @@ namespace LogicLayer.Interfaces;
 
 public interface ILogService
 {
-    public Task<OperationResult> Log(LogMessageObject logMessageObject);
+    public OperationResult CreateLog(LogMessageObject logObject);
     
-    public Task<(OperationResult, List<LogMessageObject>)> GetAll();
+    public OperationResult CreateLogTwice(LogMessageObject logObject);
+    
+    public (OperationResult, List<LogMessageObject>) GetLogs();
 }

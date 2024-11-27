@@ -5,22 +5,33 @@ namespace LogicLayer.Core;
 
 public static partial class Core
 {
-    
-    public static async Task<OperationResult> CreateLog(LogMessageObject logMessageEntry)
+    [HttpMethod("POST")]
+    public static OperationResult CreateLog(LogMessageObject logObject)
     {
         CheckInit();
         
-        var result = await GetService<ILogService>().Log(logMessageEntry);
+        var result =  GetService<ILogService>().CreateLog(logObject);
         
         return result;
     }
-
-    public static async Task<(OperationResult, List<LogMessageObject>)> GetAllLogs()
+    
+    [HttpMethod("POST")]
+    public static OperationResult CreateLogTwice(LogMessageObject logObject)
     {
         CheckInit();
         
-        var result = await GetService<ILogService>().GetAll();
-        
+        var result = GetService<ILogService>().CreateLogTwice(logObject);
+
         return result;
+    }
+
+    [HttpMethod("GET")]
+    public static (OperationResult, List<LogMessageObject>) GetLogs()
+    {
+        CheckInit();
+        
+        var (result, data) = GetService<ILogService>().GetLogs();
+        
+        return (result, data);
     }
 }
