@@ -5,20 +5,20 @@ namespace LogicLayer.Core;
 
 public static partial class Core
 {
-    public static OperationResult CreateLog(string message)
+    public static OperationResult CreateLog(LogMessageObject logObject)
     {
         CheckInit();
         
-        GetService<ILogService>().CreateLog(message);
+        GetService<ILogService>().CreateLog(logObject);
         
         return OperationResult.GetSuccess();
     }
     
-    public static OperationResult CreateLogTwice(string message)
+    public static OperationResult CreateLogTwice(LogMessageObject logObject)
     {
         CheckInit();
         
-        GetService<ILogService>().CreateLogTwice(message);
+        GetService<ILogService>().CreateLogTwice(logObject);
         
         return OperationResult.GetSuccess();
     }

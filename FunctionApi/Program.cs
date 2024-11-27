@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MockDataLayer.Services;
 
 //Init Core with Services
-Console.WriteLine("Test1");
 Core.Init(services =>
 {
     services.Register<ILogService>(new LogMockService());

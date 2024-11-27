@@ -36,6 +36,7 @@
         <Compile Include="bin\Debug\net8.0\Generated\**\*.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="bin\Debug\net8.0\" />
       <Folder Include="bin\Debug\net8.0\Generated\" />
       <Folder Include="Functions\" />
     </ItemGroup>

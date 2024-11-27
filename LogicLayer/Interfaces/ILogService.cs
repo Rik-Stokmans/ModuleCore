@@ -4,9 +4,12 @@ namespace LogicLayer.Interfaces;
 
 public interface ILogService
 {
-    [HttpMethod("GET")]
-    public OperationResult CreateLog(string message);
+    [HttpMethod("POST")]
+    public OperationResult CreateLog(LogMessageObject logObject);
+    
+    [HttpMethod("POST")]
+    public OperationResult CreateLogTwice(LogMessageObject logObject);
     
     [HttpMethod("GET")]
-    public OperationResult CreateLogTwice(string message);
+    public (OperationResult, List<LogMessageObject>) GetLogs();
 }
