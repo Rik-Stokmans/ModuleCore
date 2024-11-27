@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockDataLayer", "MockDataLa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionApi", "FunctionApi\FunctionApi.csproj", "{02D010F7-B75B-45EC-9C0C-3FA9E1BE1613}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authenticator", "Authenticator\Authenticator.csproj", "{D6DE474D-FFDB-4463-8D9E-ACBA155EDC15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{02D010F7-B75B-45EC-9C0C-3FA9E1BE1613}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02D010F7-B75B-45EC-9C0C-3FA9E1BE1613}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02D010F7-B75B-45EC-9C0C-3FA9E1BE1613}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6DE474D-FFDB-4463-8D9E-ACBA155EDC15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6DE474D-FFDB-4463-8D9E-ACBA155EDC15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6DE474D-FFDB-4463-8D9E-ACBA155EDC15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6DE474D-FFDB-4463-8D9E-ACBA155EDC15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -37,31 +37,34 @@ namespace LogicLayer.Core
             throw new Exception($"Service of type {typeof(T).Name} not registered");
         }
 
-        public static IEnumerable<(Type ServiceType, MethodInfo Method, string HttpVerb)> GetHttpAnnotatedMethods()
+        public static IEnumerable<(Type DeclaringType, MethodInfo Method, string HttpVerb)> GetHttpAnnotatedMethods()
         {
             CheckInit();
 
-            foreach (var serviceType in Services.Keys)
-            {
-                Console.WriteLine($"Checking Service Type: {serviceType.Name}");
+            // Log the start of the method discovery process
+            Console.WriteLine("Starting to scan Core class for methods annotated with HttpMethodAttribute.");
 
-                foreach (var method in serviceType.GetMethods(BindingFlags.Public | BindingFlags.Instance))
+            // Scan for methods within the Core class that are annotated with HttpMethodAttribute
+            var coreType = typeof(Core);
+
+            foreach (var method in coreType.GetMethods(BindingFlags.Public | BindingFlags.Static))
+            {
+                // Log each method being inspected
+                Console.WriteLine($"Inspecting method: {method.Name}");
+
+                var attribute = method.GetCustomAttribute<HttpMethodAttribute>();
+                if (attribute != null)
                 {
-                    Console.WriteLine($"Checking Method: {method.Name}");
-                    var attribute = method.GetCustomAttribute<HttpMethodAttribute>();
-                    
-                    
-                    
-                    
-                    if (attribute != null)
-                    {
-                        Console.WriteLine($"Discovered Method: {method.Name} with verb: {attribute.Verb}");
-                        yield return (serviceType, method, attribute.Verb);
-                    }
+                    // Log when an annotated method is discovered
+                    Console.WriteLine($"Discovered annotated method: {method.Name}, HTTP Verb: {attribute.Verb}");
+
+                    yield return (coreType, method, attribute.Verb);
                 }
             }
-        }
 
+            // Log the end of the discovery process
+            Console.WriteLine("Finished scanning Core class for annotated methods.");
+        }
 
 
         private static void CheckInit()

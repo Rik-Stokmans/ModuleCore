@@ -10,6 +10,7 @@ using MockDataLayer.Services;
 Core.Init(services =>
 {
     services.Register<ILogService>(new LogMockService());
+    services.Register<IAuthenticationService>(new AuthenticationService());
     // Add more services as needed
 });
 

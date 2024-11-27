@@ -29,6 +29,7 @@
         <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext"/>
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\Authenticator\Authenticator.csproj" />
       <ProjectReference Include="..\LogicLayer\LogicLayer.csproj" />
       <ProjectReference Include="..\MockDataLayer\MockDataLayer.csproj" />
     </ItemGroup>
