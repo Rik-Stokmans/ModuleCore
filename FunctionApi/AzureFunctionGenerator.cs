@@ -39,11 +39,8 @@ namespace FunctionApi
 
             foreach (var (serviceType, method, verb) in methods)
             {
-                // Class and DTO Names
-                var functionName = serviceType.Name.StartsWith("I")
-                    ? serviceType.Name.Substring(1)
-                    : serviceType.Name;
-
+                var classType = serviceType.Name;
+                
                 var classname = $"{method.Name}Function";
                 var dtoClassName = $"{classname}ParameterObject";
 
@@ -77,7 +74,7 @@ namespace FunctionApi
 
                     resultHandlingCode = $$"""
                                            
-                                                        var (result, data) = Core.{{method.Name}}(
+                                                        var (result, data) = {{classType}}.{{method.Name}}(
                                                             {{string.Join(", ", parameters.Select(p => $"requestData.{char.ToUpper(p.Name[0]) + p.Name.Substring(1)}"))}}
                                                         );
                                
@@ -95,7 +92,7 @@ namespace FunctionApi
                     // Handle non-tuple return type (e.g., a single object or primitive value)
                     resultHandlingCode =  $$"""
                                             
-                                                        var result = Core.{{method.Name}}(
+                                                        var result = {{classType}}.{{method.Name}}(
                                                             #pragma warning disable CS8604 // Possible null reference argument.
                                                             {{string.Join(", ", parameters.Select(p => $"requestData.{char.ToUpper(p.Name[0]) + p.Name.Substring(1)}"))}}
                                                             #pragma warning restore CS8604 // Possible null reference argument.
@@ -114,8 +111,8 @@ namespace FunctionApi
                 // Generate the Azure Function
                 var functionCode = $$"""
                                      using System.Text.Json;
-                                     using LogicLayer.Core;
                                      using LogicLayer.Models;
+                                     using LogicLayer.Modules;
                                      using Microsoft.AspNetCore.Http;
                                      using Microsoft.AspNetCore.Mvc;
                                      using Microsoft.Azure.Functions.Worker;

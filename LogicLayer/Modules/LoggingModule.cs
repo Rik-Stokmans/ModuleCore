@@ -1,16 +1,16 @@
 using LogicLayer.Interfaces;
 using LogicLayer.Models;
 
-namespace LogicLayer.Core;
+namespace LogicLayer.Modules;
 
-public static partial class Core
+public class LoggingModule : IModule
 {
     [HttpMethod("POST")]
     public static OperationResult CreateLog(LogMessageObject logObject)
     {
-        CheckInit();
+        Core.Core.CheckInit();
         
-        var result =  GetService<ILogService>().CreateLog(logObject);
+        var result = Core.Core.GetService<ILogService>().CreateLog(logObject);
         
         return result;
     }
@@ -18,9 +18,9 @@ public static partial class Core
     [HttpMethod("POST")]
     public static OperationResult CreateLogTwice(LogMessageObject logObject)
     {
-        CheckInit();
+        Core.Core.CheckInit();
         
-        var result = GetService<ILogService>().CreateLogTwice(logObject);
+        var result = Core.Core.GetService<ILogService>().CreateLogTwice(logObject);
 
         return result;
     }
@@ -28,10 +28,15 @@ public static partial class Core
     [HttpMethod("GET")]
     public static (OperationResult, List<LogMessageObject>) GetLogs()
     {
-        CheckInit();
+        Core.Core.CheckInit();
         
-        var (result, data) = GetService<ILogService>().GetLogs();
+        var (result, data) = Core.Core.GetService<ILogService>().GetLogs();
         
         return (result, data);
+    }
+
+    public string GetModuleHtml()
+    {
+        return "<h1>Logging Module</h1>";
     }
 }

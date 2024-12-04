@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using LogicLayer.Models;
+using LogicLayer.Modules;
 
 namespace LogicLayer.Core
 {
@@ -41,33 +39,48 @@ namespace LogicLayer.Core
         {
             CheckInit();
 
-            // Log the start of the method discovery process
-            Console.WriteLine("Starting to scan Core class for methods annotated with HttpMethodAttribute.");
+            // Log the start of the discovery process
+            Console.WriteLine("Starting to scan LogicLayer.Modules namespace for methods annotated with HttpMethodAttribute.");
 
-            // Scan for methods within the Core class that are annotated with HttpMethodAttribute
-            var coreType = typeof(Core);
+            // Get all assemblies currently loaded in the app domain
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            foreach (var method in coreType.GetMethods(BindingFlags.Public | BindingFlags.Static))
+            foreach (var assembly in assemblies)
             {
-                // Log each method being inspected
-                Console.WriteLine($"Inspecting method: {method.Name}");
-
-                var attribute = method.GetCustomAttribute<HttpMethodAttribute>();
-                if (attribute != null)
+                // Get all types in the assembly
+                foreach (var type in assembly.GetTypes())
                 {
-                    // Log when an annotated method is discovered
-                    Console.WriteLine($"Discovered annotated method: {method.Name}, HTTP Verb: {attribute.Verb}");
+                    // Check if the type belongs to the LogicLayer.Modules namespace
+                    if (type.Namespace == "LogicLayer.Modules")
+                    {
+                        // Log the type being inspected
+                        Console.WriteLine($"Inspecting type: {type.FullName}");
 
-                    yield return (coreType, method, attribute.Verb);
+                        // Get public static methods of the type
+                        foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Static))
+                        {
+                            // Check if the method has the HttpMethodAttribute
+                            var attribute = method.GetCustomAttribute<HttpMethodAttribute>();
+                            if (attribute != null)
+                            {
+                                // Log when an annotated method is discovered
+                                Console.WriteLine($"Discovered annotated method: {method.Name} in type {type.Name}, HTTP Verb: {attribute.Verb}");
+
+                                yield return (type, method, attribute.Verb);
+                            }
+                        }
+                    }
                 }
             }
 
             // Log the end of the discovery process
-            Console.WriteLine("Finished scanning Core class for annotated methods.");
+            Console.WriteLine("Finished scanning LogicLayer.Modules namespace for annotated methods.");
         }
 
 
-        private static void CheckInit()
+
+
+        public static void CheckInit()
         {
             if (!_initialized) throw new Exception("Core not initialized");
         }
