@@ -1,6 +1,7 @@
 using FunctionApi;
-using LogicLayer.Core;
-using LogicLayer.Interfaces;
+using LogicLayer;
+using LogicLayer.Authentication.Interfaces;
+using LogicLayer.Modules.LoggingModule.Interfaces;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;

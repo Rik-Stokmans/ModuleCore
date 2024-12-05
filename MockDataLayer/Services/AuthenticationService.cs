@@ -1,4 +1,4 @@
-using LogicLayer.Interfaces;
+using LogicLayer.Authentication.Interfaces;
 
 namespace MockDataLayer.Services;
 

@@ -1,4 +1,4 @@
-namespace LogicLayer.Models;
+namespace LogicLayer.Modules.LoggingModule.Models;
 
 public class LogMessageObject(string message) : LogObjectBase
 {

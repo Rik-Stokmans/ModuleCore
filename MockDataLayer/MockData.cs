@@ -1,4 +1,4 @@
-using LogicLayer.Models;
+using LogicLayer.Modules.LoggingModule.Models;
 
 namespace MockDataLayer;
 

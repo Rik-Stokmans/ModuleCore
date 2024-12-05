@@ -1,17 +1,17 @@
-using LogicLayer.Interfaces;
+using LogicLayer.Authentication.Interfaces;
 
-namespace LogicLayer.Core;
+namespace LogicLayer.Authentication;
 
-public static partial class Core
+public static class AuthenticationCore
 {
     public static bool ValidateApiKey(string apiKey)
     {
-        return GetService<IAuthenticationService>().ApiKeyIsAuthenticated(apiKey);
+        return Core.GetService<IAuthenticationService>().ApiKeyIsAuthenticated(apiKey);
     }
     
     public static bool ValidateSerialNumber(string hashedSerialNumber)
     {
-        var serialNumbers = GetService<IAuthenticationService>().GetAllSerialNumbers();
+        var serialNumbers = LogicLayer.Core.GetService<IAuthenticationService>().GetAllSerialNumbers();
         
         var isValid = false;
         

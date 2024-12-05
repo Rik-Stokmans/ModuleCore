@@ -1,4 +1,4 @@
-namespace LogicLayer.Models;
+namespace LogicLayer.CoreModels;
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 public class HttpMethodAttribute(string verb) : Attribute

@@ -1,4 +1,4 @@
-using LogicLayer.Core;
+using LogicLayer;
 
 namespace FunctionApi
 {

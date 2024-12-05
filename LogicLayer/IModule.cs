@@ -1,6 +1,4 @@
-using LogicLayer.Models;
-
-namespace LogicLayer.Interfaces;
+namespace LogicLayer;
 
 public interface IModule
 {

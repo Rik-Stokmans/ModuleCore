@@ -1,4 +1,4 @@
-namespace LogicLayer.Interfaces;
+namespace LogicLayer.Authentication.Interfaces;
 
 public interface IAuthenticationService
 {

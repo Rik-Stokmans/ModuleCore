@@ -1,4 +1,4 @@
-namespace LogicLayer.Models;
+namespace LogicLayer.CoreModels;
 
 public class OperationResult(int code = 200, string message = "OK")
 {

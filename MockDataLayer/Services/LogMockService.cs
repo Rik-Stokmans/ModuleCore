@@ -1,5 +1,6 @@
-using LogicLayer.Interfaces;
-using LogicLayer.Models;
+using LogicLayer.CoreModels;
+using LogicLayer.Modules.LoggingModule.Interfaces;
+using LogicLayer.Modules.LoggingModule.Models;
 
 namespace MockDataLayer.Services;
 

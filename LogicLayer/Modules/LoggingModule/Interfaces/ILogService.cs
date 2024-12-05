@@ -1,6 +1,7 @@
-using LogicLayer.Models;
+using LogicLayer.CoreModels;
+using LogicLayer.Modules.LoggingModule.Models;
 
-namespace LogicLayer.Interfaces;
+namespace LogicLayer.Modules.LoggingModule.Interfaces;
 
 public interface ILogService
 {

@@ -1,11 +1,10 @@
 using System.Collections.Concurrent;
 using System.Reflection;
-using LogicLayer.Models;
-using LogicLayer.Modules;
+using LogicLayer.CoreModels;
 
-namespace LogicLayer.Core
+namespace LogicLayer
 {
-    public static partial class Core
+    public static class Core
     {
         private static readonly ConcurrentDictionary<Type, object> Services = new();
         private static bool _initialized;

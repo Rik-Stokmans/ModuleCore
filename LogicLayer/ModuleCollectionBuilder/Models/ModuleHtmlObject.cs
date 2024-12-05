@@ -1,4 +1,4 @@
-namespace LogicLayer.Models;
+namespace LogicLayer.ModuleCollectionBuilder.Models;
 
 public class ModuleHtmlObject(string html)
 {
