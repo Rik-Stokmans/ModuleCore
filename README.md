@@ -75,3 +75,8 @@ FunctionApi/
 ## Conclusion
 
 This project demonstrates a dynamic approach to generating Azure Functions based on annotated methods in the logic layer. It includes a mock data layer for testing and a robust API layer for handling HTTP requests and responses. The use of Azure Functions allows for scalable and efficient serverless API development.
+
+## License
+
+This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International (CC BY-NC-ND 4.0).
+You may share it as long as you provide proper attribution, but you cannot modify or sell the code.
