@@ -1,3 +1,4 @@
+using System.Reflection;
 using LogicLayer;
 
 namespace FunctionApi
@@ -30,6 +31,12 @@ namespace FunctionApi
         {
             var methods = Core.GetHttpAnnotatedMethods();
 
+            var valueTuples = methods as (Type DeclaringType, MethodInfo Method, string HttpVerb)[] ?? methods.ToArray();
+            foreach (var valueTuple in valueTuples)
+            {
+                Console.WriteLine($"Found method: {valueTuple.Method.Name} in {valueTuple.DeclaringType.Name} with HTTP verb: {valueTuple.HttpVerb}");
+            }
+
             // Ensure output directory exists
             const string outputDirectory = "Generated";
             if (!Directory.Exists(outputDirectory))
@@ -37,7 +44,7 @@ namespace FunctionApi
                 Directory.CreateDirectory(outputDirectory);
             }
 
-            foreach (var (serviceType, method, verb) in methods)
+            foreach (var (serviceType, method, verb) in valueTuples)
             {
                 var classType = serviceType.Name;
                 
@@ -111,8 +118,8 @@ namespace FunctionApi
                 // Generate the Azure Function
                 var functionCode = $$"""
                                      using System.Text.Json;
-                                     using LogicLayer.Models;
-                                     using LogicLayer.Modules;
+                                     using LogicLayer.Modules.{{classType}};
+                                     using LogicLayer.Modules.{{classType}}.Models;
                                      using Microsoft.AspNetCore.Http;
                                      using Microsoft.AspNetCore.Mvc;
                                      using Microsoft.Azure.Functions.Worker;

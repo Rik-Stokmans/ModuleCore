@@ -50,23 +50,21 @@ namespace LogicLayer
                 foreach (var type in assembly.GetTypes())
                 {
                     // Check if the type belongs to the LogicLayer.Modules namespace
-                    if (type.Namespace == "LogicLayer.Modules")
+                    if (type.Namespace != null && !type.Namespace.StartsWith("LogicLayer.Modules")) continue;
+                    // Log the type being inspected
+                    Console.WriteLine($"Inspecting type: {type.FullName}");
+
+                    // Get public static methods of the type
+                    foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Static))
                     {
-                        // Log the type being inspected
-                        Console.WriteLine($"Inspecting type: {type.FullName}");
-
-                        // Get public static methods of the type
-                        foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Static))
+                        // Check if the method has the HttpMethodAttribute
+                        var attribute = method.GetCustomAttribute<HttpMethodAttribute>();
+                        if (attribute != null)
                         {
-                            // Check if the method has the HttpMethodAttribute
-                            var attribute = method.GetCustomAttribute<HttpMethodAttribute>();
-                            if (attribute != null)
-                            {
-                                // Log when an annotated method is discovered
-                                Console.WriteLine($"Discovered annotated method: {method.Name} in type {type.Name}, HTTP Verb: {attribute.Verb}");
+                            // Log when an annotated method is discovered
+                            Console.WriteLine($"Discovered annotated method: {method.Name} in type {type.Name}, HTTP Verb: {attribute.Verb}");
 
-                                yield return (type, method, attribute.Verb);
-                            }
+                            yield return (type, method, attribute.Verb);
                         }
                     }
                 }

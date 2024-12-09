@@ -10,4 +10,5 @@ public interface ILogService
     public OperationResult CreateLogTwice(LogMessageObject logObject);
     
     public (OperationResult, List<LogMessageObject>) GetLogs();
+    public OperationResult DeleteLogs();
 }

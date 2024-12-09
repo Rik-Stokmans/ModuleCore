@@ -33,4 +33,11 @@ public class LogMockService : ILogService
     {
         return (OperationResult.GetSuccess(), MockData.LogObjects);
     }
+    
+    public OperationResult DeleteLogs()
+    {
+        MockData.LogObjects.Clear();
+        
+        return OperationResult.GetSuccess();
+    }
 }

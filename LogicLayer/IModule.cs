@@ -1,6 +1,8 @@
+using LogicLayer.Modules.ModuleCollectionBuilder.Models;
+
 namespace LogicLayer;
 
 public interface IModule
 {
-    public string GetModuleHtml();
+    public ModuleHtmlObject GetModuleHtml();
 }

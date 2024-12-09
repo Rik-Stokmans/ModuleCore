@@ -1,7 +1,7 @@
 using LogicLayer.CoreModels;
-using LogicLayer.ModuleCollectionBuilder.Models;
+using LogicLayer.Modules.ModuleCollectionBuilder.Models;
 
-namespace LogicLayer.ModuleCollectionBuilder
+namespace LogicLayer.Modules.ModuleCollectionBuilder
 {
     public static class ModuleCollectionBuilder
     {
@@ -38,7 +38,7 @@ namespace LogicLayer.ModuleCollectionBuilder
             }
             
             List<ModuleHtmlObject> moduleHtmlObjects = [];
-            moduleHtmlObjects.AddRange(modules.Select(module => new ModuleHtmlObject(module.GetModuleHtml())));
+            moduleHtmlObjects.AddRange(modules.Select(module => module.GetModuleHtml()));
             
             return (OperationResult.GetSuccess(), moduleHtmlObjects);
         }

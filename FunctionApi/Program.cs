@@ -2,6 +2,7 @@ using FunctionApi;
 using LogicLayer;
 using LogicLayer.Authentication.Interfaces;
 using LogicLayer.Modules.LoggingModule.Interfaces;
+using LogicLayer.Modules.TestModule.Interfaces;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ using MockDataLayer.Services;
 Core.Init(services =>
 {
     services.Register<ILogService>(new LogMockService());
+    services.Register<ITestService>(new TestMockService());
     services.Register<IAuthenticationService>(new AuthenticationService());
     // Add more services as needed
 });
