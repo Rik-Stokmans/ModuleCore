@@ -1,5 +1,6 @@
 using System.Reflection;
 using LogicLayer;
+using LogicLayer.CoreModels;
 
 namespace FunctionApi
 {
@@ -32,10 +33,6 @@ namespace FunctionApi
             var methods = Core.GetHttpAnnotatedMethods();
 
             var valueTuples = methods as (Type DeclaringType, MethodInfo Method, string HttpVerb)[] ?? methods.ToArray();
-            foreach (var valueTuple in valueTuples)
-            {
-                Console.WriteLine($"Found method: {valueTuple.Method.Name} in {valueTuple.DeclaringType.Name} with HTTP verb: {valueTuple.HttpVerb}");
-            }
 
             // Ensure output directory exists
             const string outputDirectory = "Generated";
@@ -117,7 +114,9 @@ namespace FunctionApi
 
                 // Generate the Azure Function
                 var functionCode = $$"""
+                                     using System.Reflection;
                                      using System.Text.Json;
+                                     using LogicLayer.CoreModels;
                                      using LogicLayer.Modules.{{classType}};
                                      using LogicLayer.Modules.{{classType}}.Models;
                                      using Microsoft.AspNetCore.Http;
@@ -137,12 +136,36 @@ namespace FunctionApi
                                              {
                                                  logger.LogInformation("Processing request for {{method.Name}}.");
                      
-                                                 var headers = req.Headers.ToDictionary(k => k.Key, v => v.Value.ToString());
-                                                 if (!IsAuthenticated(headers))
+                                                 // Authenticate the request
+                                                 var isAuthenticated = true;
+                                                 
+                                                 var (permissions, client) = GetAuthenticationPermissions(req.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()));
+                                                 if (client == "")
                                                  {
-                                                     logger.LogWarning("Request not authenticated.");
-                                                     return new UnauthorizedResult();   
-                                                 } 
+                                                     return new UnauthorizedResult();
+                                                 }
+                                                 
+                                                 try
+                                                 {
+                                                     (typeof({{classType}}).GetMethod("{{method.Name}}") ?? throw new InvalidOperationException()).GetCustomAttributes(typeof(AuthPermissionClaim)).ToList().ForEach(claim =>
+                                                     {
+                                                         if (!permissions.Contains((AuthPermissionClaim) claim))
+                                                         {
+                                                             isAuthenticated = false;
+                                                         }
+                                                     });
+                                                 }
+                                                 catch (Exception ex)
+                                                 {
+                                                     // ignored
+                                                 }
+                                                 
+                                                 if (!isAuthenticated)
+                                                 {
+                                                     return new UnauthorizedResult();
+                                                 }
+                                     
+                                     
                                                     
                                                  {{(hasParameters ? 
                                                      $$"""

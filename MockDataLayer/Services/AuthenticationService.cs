@@ -1,16 +1,17 @@
 using LogicLayer.Authentication.Interfaces;
+using LogicLayer.CoreModels;
 
 namespace MockDataLayer.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
-    public Task<bool> ApiKeyIsAuthenticated(string apiKey)
+    public Task<(List<AuthPermissionClaim>, string)> GetPermissionsFromApiKey(string apiKey)
     {
-        return Task.FromResult(MockData.ApiKeys.Contains(apiKey));
+        throw new NotImplementedException();
     }
 
-    public Task<List<string>> GetAllSerialNumbers()
+    public Task<(List<AuthPermissionClaim>, string)> GetPermissionsFromBearer(string bearer)
     {
-        return Task.FromResult(MockData.SerialNumbers);
+        throw new NotImplementedException();
     }
 }

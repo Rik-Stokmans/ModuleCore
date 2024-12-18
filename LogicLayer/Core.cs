@@ -52,7 +52,7 @@ namespace LogicLayer
                     // Check if the type belongs to the LogicLayer.Modules namespace
                     if (type.Namespace != null && !type.Namespace.StartsWith("LogicLayer.Modules")) continue;
                     // Log the type being inspected
-                    Console.WriteLine($"Inspecting type: {type.FullName}");
+                    //Console.WriteLine($"Inspecting type: {type.FullName}");
 
                     // Get public static methods of the type
                     foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Static))

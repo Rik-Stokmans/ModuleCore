@@ -7,31 +7,28 @@ namespace LogicLayer.Modules.LoggingModule;
 
 public class LoggingModule : IModule
 {
+    [AuthPermissionClaim(PermissionClaim.Post)]
     [HttpMethod("POST")]
     public static OperationResult CreateLog(LogMessageObject logObject)
     {
-        Core.CheckInit();
-        
         var result = Core.GetService<ILogService>().CreateLog(logObject).Result;
         
         return result;
     }
 
+    [AuthPermissionClaim(PermissionClaim.Get)]
     [HttpMethod("GET")]
     public static (OperationResult, List<LogMessageObject>) GetLogs()
     {
-        Core.CheckInit();
-        
         var (result, data) = Core.GetService<ILogService>().GetLogs().Result;
         
         return (result, data);
     }
 
+    [AuthPermissionClaim(PermissionClaim.Delete)]
     [HttpMethod("DELETE")]
     public static OperationResult DeleteLogs()
     {
-        Core.CheckInit();
-        
         var result = Core.GetService<ILogService>().DeleteLogs().Result;
         
         return result;

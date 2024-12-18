@@ -1,21 +1,22 @@
+using LogicLayer;
 using LogicLayer.Authentication;
+using LogicLayer.CoreModels;
 
 namespace Authenticator;
 
 public static class Authenticator
 {
-    public static bool IsAuthenticated(Dictionary<string, string> headers)
+    public static (List<AuthPermissionClaim>, string) GetAuthenticationPermissions(Dictionary<string, string> headers)
     {
         if (headers.TryGetValue("ApiKey", out var apiKey))
         {
-            return AuthenticationCore.ValidateApiKey(apiKey);
+            return AuthenticationCore.GetPermissionsFromApiKey(apiKey);
         }
-        
-        if (headers.TryGetValue("HashedSerialNumber", out var hashedSerialNumber))
+        if (headers.TryGetValue("Bearer", out var bearer))
         {
-            return AuthenticationCore.ValidateSerialNumber(hashedSerialNumber);
+            return AuthenticationCore.GetPermissionsFromBearer(bearer);
         }
 
-        return false;
+        return ([], "");
     }
 }

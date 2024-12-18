@@ -9,11 +9,10 @@ namespace LogicLayer.Modules.ChildFocusModule;
 
 public class ChildFocusModule : IModule
 {
+    [AuthPermissionClaim(PermissionClaim.Post)]
     [HttpMethod("POST")]
     public static OperationResult LogChildFocus(ChildFocusLog childFocusLog)
     {
-        Core.CheckInit();
-
         OperationResult result;
 
         var missingPersonExists = Core.GetService<IChildFocus>().MissingPersonExists(childFocusLog.ChildFocusId);
@@ -34,21 +33,19 @@ public class ChildFocusModule : IModule
         return result;
     }
     
+    [AuthPermissionClaim(PermissionClaim.Get)]
     [HttpMethod("GET")]
     public static (OperationResult, List<ChildFocusLog>) GetChildFocusLogs()
     {
-        Core.CheckInit();
-        
         var result = Core.GetService<IChildFocus>().GetChildFocusLogs();
         
         return result;
     }
     
+    [AuthPermissionClaim(PermissionClaim.Get)]
     [HttpMethod("GET")]
     public static (OperationResult, List<MissingPerson>) GetChildFocusObjects()
     {
-        Core.CheckInit();
-        
         var result = Core.GetService<IChildFocus>().GetMissingPersons();
         
         return result;

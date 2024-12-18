@@ -12,7 +12,7 @@ using MockDataLayer.Services;
 //Init Core with Services
 Core.Init(services =>
 {
-    services.Register<ILogService>(new AzureLogService());
+    services.Register<ILogService>(new LogMockService());
     services.Register<IAuthenticationService>(new AzureAuthenticationService());
     services.Register<IChildFocus>(new ChildFocusMockService());
     // Add more services as needed

@@ -1,49 +1,66 @@
 using LogicLayer.Authentication.Interfaces;
 using LogicLayer.CoreModels;
+using LogicLayer.Modules.LoggingModule.Models;
 using Microsoft.Data.SqlClient;
 
 namespace AzureDatabase.Services;
 
 public class AzureAuthenticationService : IAuthenticationService
 {
-    public async Task<bool> ApiKeyIsAuthenticated(string apiKey)
+    public async Task<(List<AuthPermissionClaim>, string)> GetPermissionsFromApiKey(string apiKey)
     {
         try
         {
-            await using var command = new SqlCommand("SELECT COUNT(*) FROM ApiKeys WHERE ApiKey = @ApiKey",
-                new DatabaseConnection().Connection);
-            command.Parameters.AddWithValue("@ApiKey", apiKey);
+            var permissions = new List<AuthPermissionClaim>();
+            var client = "";
 
-            var result = (int) (await command.ExecuteScalarAsync() ?? 0);
-            return result > 0;
+            await using var command = new SqlCommand($"SELECT Token, Permissions, Client FROM Permissions WHERE Token = 'ApiKey-{apiKey}'", new DatabaseConnection().Connection);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (reader.Read())
+            {
+                Console.WriteLine(reader.GetString(0));
+                reader.GetString(1).Split(',').ToList().ForEach(permission =>
+                {
+                    permissions.Add(new AuthPermissionClaim((PermissionClaim) int.Parse(permission)));
+                });
+                client = reader.GetString(2);
+            }
+
+            return (permissions, client);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            return false;
+            return ([], "");
         }
     }
 
-    public async Task<List<string>> GetAllSerialNumbers()
+    public async Task<(List<AuthPermissionClaim>, string)> GetPermissionsFromBearer(string bearer)
     {
         try
         {
-            var serialNumbers = new List<string>();
-            
-            await using var command = new SqlCommand("SELECT SerialNumber FROM SerialNumbers", new DatabaseConnection().Connection);
+            var permissions = new List<AuthPermissionClaim>();
+            var client = "";
+
+            await using var command = new SqlCommand($"SELECT Token, Permissions, Client FROM Permissions WHERE Token = 'Bearer-{bearer}'", new DatabaseConnection().Connection);
             await using var reader = await command.ExecuteReaderAsync();
-            
+
             while (reader.Read())
             {
-                serialNumbers.Add(reader.GetString(0));
+                reader.GetString(1).Split(',').ToList().ForEach(permission =>
+                {
+                    permissions.Add(new AuthPermissionClaim((PermissionClaim) int.Parse(permission)));
+                });
+                client = reader.GetString(2);
             }
-            
-            return serialNumbers;
+
+            return (permissions, client);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            return [];
+            return ([], "");
         }
     }
 }

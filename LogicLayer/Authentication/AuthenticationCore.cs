@@ -1,35 +1,21 @@
 using LogicLayer.Authentication.Interfaces;
+using LogicLayer.CoreModels;
 
 namespace LogicLayer.Authentication;
 
 public static class AuthenticationCore
 {
-    public static bool ValidateApiKey(string apiKey)
+    public static (List<AuthPermissionClaim>, string) GetPermissionsFromApiKey(string apiKey)
     {
-        return Core.GetService<IAuthenticationService>().ApiKeyIsAuthenticated(apiKey).Result;
-    }
-    
-    public static bool ValidateSerialNumber(string hashedSerialNumber)
-    {
-        var serialNumbers = Core.GetService<IAuthenticationService>().GetAllSerialNumbers().Result;
-        
-        var isValid = false;
-        
-        serialNumbers.ForEach(sn => {
-            try
-            {
-                if (BCrypt.Net.BCrypt.Verify(sn, hashedSerialNumber))
-                {
-                    isValid = true;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-        });
+        var (permissions, client) = Core.GetService<IAuthenticationService>().GetPermissionsFromApiKey(apiKey).Result;
 
-        return isValid;
+        return (permissions, client);
     }
-    
+
+    public static (List<AuthPermissionClaim>, string) GetPermissionsFromBearer(string bearer)
+    {
+        var (permissions, client) = Core.GetService<IAuthenticationService>().GetPermissionsFromBearer(bearer).Result;
+        
+        return (permissions, client);
+    }
 }

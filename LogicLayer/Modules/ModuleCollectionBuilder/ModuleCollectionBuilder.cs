@@ -5,6 +5,7 @@ namespace LogicLayer.Modules.ModuleCollectionBuilder
 {
     public static class ModuleCollectionBuilder
     {
+        [AuthPermissionClaim(PermissionClaim.Frontend)]
         [HttpMethod("GET")]
         public static (OperationResult, List<ModuleHtmlObject>) GetAllModuleHtml()
         {
