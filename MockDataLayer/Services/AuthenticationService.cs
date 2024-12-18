@@ -4,13 +4,13 @@ namespace MockDataLayer.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
-    public bool ApiKeyIsAuthenticated(string apiKey)
+    public Task<bool> ApiKeyIsAuthenticated(string apiKey)
     {
-        return MockData.ApiKeys.Contains(apiKey);
+        return Task.FromResult(MockData.ApiKeys.Contains(apiKey));
     }
 
-    public List<string> GetAllSerialNumbers()
+    public Task<List<string>> GetAllSerialNumbers()
     {
-        return MockData.SerialNumbers;
+        return Task.FromResult(MockData.SerialNumbers);
     }
 }

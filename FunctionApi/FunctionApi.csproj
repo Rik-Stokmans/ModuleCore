@@ -30,6 +30,7 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Authenticator\Authenticator.csproj" />
+      <ProjectReference Include="..\AzureDatabase\AzureDatabase.csproj" />
       <ProjectReference Include="..\LogicLayer\LogicLayer.csproj" />
       <ProjectReference Include="..\MockDataLayer\MockDataLayer.csproj" />
     </ItemGroup>

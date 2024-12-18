@@ -1,6 +1,21 @@
 namespace LogicLayer.Modules.LoggingModule.Models;
 
-public class LogMessageObject(string message) : LogObjectBase
+public class LogMessageObject : LogObjectBase
 {
-    public string Message { get; set; } = message;
+    public LogMessageObject(string message)
+    {
+        Message = message;
+    }
+    
+    public LogMessageObject(string message, DateTime time)
+    {
+        Message = message;
+        Time = time;
+    }
+
+    public LogMessageObject()
+    {
+    }
+
+    public string Message { get; set; }
 }

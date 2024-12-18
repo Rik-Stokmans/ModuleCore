@@ -12,18 +12,8 @@ public class LoggingModule : IModule
     {
         Core.CheckInit();
         
-        var result = Core.GetService<ILogService>().CreateLog(logObject);
+        var result = Core.GetService<ILogService>().CreateLog(logObject).Result;
         
-        return result;
-    }
-    
-    [HttpMethod("POST")]
-    public static OperationResult CreateLogTwice(LogMessageObject logObject)
-    {
-        Core.CheckInit();
-        
-        var result = Core.GetService<ILogService>().CreateLogTwice(logObject);
-
         return result;
     }
 
@@ -32,7 +22,7 @@ public class LoggingModule : IModule
     {
         Core.CheckInit();
         
-        var (result, data) = Core.GetService<ILogService>().GetLogs();
+        var (result, data) = Core.GetService<ILogService>().GetLogs().Result;
         
         return (result, data);
     }
@@ -42,7 +32,7 @@ public class LoggingModule : IModule
     {
         Core.CheckInit();
         
-        var result = Core.GetService<ILogService>().DeleteLogs();
+        var result = Core.GetService<ILogService>().DeleteLogs().Result;
         
         return result;
     }
@@ -63,7 +53,6 @@ public class LoggingModule : IModule
             </div>
             
             <button id='create-log'>Create Log</button>
-            <button id='create-log-twice'>Create Log Twice</button>
             <button id='get-logs'>Get Logs</button>
             <button id='delete-logs'>Delete Logs</button>
             
@@ -109,32 +98,6 @@ public class LoggingModule : IModule
                         } catch (err) {
                             console.error('Error creating log:', err);
                             document.getElementById('response-output').textContent = 'Error creating log: ' + err.message;
-                        }
-                    });
-            
-                    document.getElementById('create-log-twice').addEventListener('click', async () => {
-                        const logObject = {
-                            "LogObject": {
-                                "Message": getLogMessage()
-                            }
-                        };
-                        try {
-                            const response = await fetch(`${apiEndpoint}/CreateLogTwice`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'ApiKey': "ApiKeyTest"
-                                },
-                                body: JSON.stringify(logObject)
-                            });
-                            if (!response.ok) {
-                                throw new Error(`Failed to create log twice: ${response.statusText}`);
-                            }
-                            const result = await response.json();
-                            document.getElementById('response-output').textContent = JSON.stringify(result, null, 2);
-                        } catch (err) {
-                            console.error('Error creating log twice:', err);
-                            document.getElementById('response-output').textContent = 'Error creating log twice: ' + err.message;
                         }
                     });
             

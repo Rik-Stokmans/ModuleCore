@@ -6,12 +6,12 @@ public static class AuthenticationCore
 {
     public static bool ValidateApiKey(string apiKey)
     {
-        return Core.GetService<IAuthenticationService>().ApiKeyIsAuthenticated(apiKey);
+        return Core.GetService<IAuthenticationService>().ApiKeyIsAuthenticated(apiKey).Result;
     }
     
     public static bool ValidateSerialNumber(string hashedSerialNumber)
     {
-        var serialNumbers = LogicLayer.Core.GetService<IAuthenticationService>().GetAllSerialNumbers();
+        var serialNumbers = Core.GetService<IAuthenticationService>().GetAllSerialNumbers().Result;
         
         var isValid = false;
         

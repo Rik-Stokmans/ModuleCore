@@ -2,7 +2,7 @@ namespace LogicLayer.Authentication.Interfaces;
 
 public interface IAuthenticationService
 {
-    public bool ApiKeyIsAuthenticated(string apiKey);
+    public Task<bool> ApiKeyIsAuthenticated(string apiKey);
     
-    public List<string> GetAllSerialNumbers();
+    public Task<List<string>>GetAllSerialNumbers();
 }
