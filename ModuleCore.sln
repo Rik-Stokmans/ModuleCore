@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicLayer", "LogicLayer\LogicLayer.csproj", "{4A167573-8D15-4D78-82EF-409CF5057C20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockDataLayer", "MockDataLayer\MockDataLayer.csproj", "{FA0ACDF2-B857-419C-865F-D8EDE25D7CAA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransientDataLayer", "TransientDataLayer\TransientDataLayer.csproj", "{FA0ACDF2-B857-419C-865F-D8EDE25D7CAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionApi", "FunctionApi\FunctionApi.csproj", "{02D010F7-B75B-45EC-9C0C-3FA9E1BE1613}"
 EndProject

@@ -4,6 +4,7 @@ using LogicLayer;
 using LogicLayer.Authentication.Interfaces;
 using LogicLayer.Modules.ChildFocusModule.Interfaces;
 using LogicLayer.Modules.LoggingModule.Interfaces;
+using LogicLayer.Modules.NuNlScraperModule.Interfaces;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,9 +13,10 @@ using MockDataLayer.Services;
 //Init Core with Services
 Core.Init(services =>
 {
-    services.Register<ILogService>(new LogMockService());
+    services.Register<ILogService>(new AzureLogService());
     services.Register<IAuthenticationService>(new AzureAuthenticationService());
     services.Register<IChildFocus>(new ChildFocusMockService());
+    services.Register<INewsObjectService>(new NewsObjectTransientService());
     // Add more services as needed
 });
 

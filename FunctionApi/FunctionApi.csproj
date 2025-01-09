@@ -32,7 +32,7 @@
       <ProjectReference Include="..\Authenticator\Authenticator.csproj" />
       <ProjectReference Include="..\AzureDatabase\AzureDatabase.csproj" />
       <ProjectReference Include="..\LogicLayer\LogicLayer.csproj" />
-      <ProjectReference Include="..\MockDataLayer\MockDataLayer.csproj" />
+      <ProjectReference Include="..\TransientDataLayer\TransientDataLayer.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="bin\Debug\net8.0\Generated\**\*.cs" />
@@ -40,6 +40,5 @@
     <ItemGroup>
       <Folder Include="bin\Debug\net8.0\" />
       <Folder Include="bin\Debug\net8.0\Generated\" />
-      <Folder Include="Functions\" />
     </ItemGroup>
 </Project>

@@ -18,4 +18,26 @@ public static class AuthenticationCore
         
         return (permissions, client);
     }
+
+    public static (bool succes, string token) LoginUser(string username, string password)
+    {
+        var (dbPassword, permissions, client) = Core.GetService<IAuthenticationService>().GetUser(username).Result;
+        
+        if (dbPassword == password)
+        {
+            return (true, CreateBearerToken(permissions, client));
+        }
+        
+        return (false, "");
+    }
+
+    private static string CreateBearerToken(List<PermissionClaim> permissions, string client)
+    {
+        var token = Guid.NewGuid().ToString();
+        var permissionString = string.Join(',', permissions.Select(permission => (int) permission));
+        
+        Core.GetService<IAuthenticationService>().CreateBearerToken("bearer-" + token, permissionString, client);
+        
+        return token;
+    }
 }

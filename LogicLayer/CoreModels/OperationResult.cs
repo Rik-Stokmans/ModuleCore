@@ -25,6 +25,11 @@ public class OperationResult(int code = 200, string message = "OK")
     {
         return new OperationResult(400, "BadRequest");
     }
+    
+    public static OperationResult GetUnauthorized()
+    {
+        return new OperationResult(401, "Unauthorized");
+    }
 
     public static OperationResult GetNotFound()
     {

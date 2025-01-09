@@ -140,15 +140,16 @@ namespace FunctionApi
                                                  var isAuthenticated = true;
                                                  
                                                  var (permissions, client) = GetAuthenticationPermissions(req.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()));
-                                                 if (client == "")
-                                                 {
-                                                     return new UnauthorizedResult();
-                                                 }
                                                  
                                                  try
                                                  {
                                                      (typeof({{classType}}).GetMethod("{{method.Name}}") ?? throw new InvalidOperationException()).GetCustomAttributes(typeof(AuthPermissionClaim)).ToList().ForEach(claim =>
                                                      {
+                                                         if (client == "")
+                                                         {
+                                                             isAuthenticated = false;
+                                                         }
+                                                         
                                                          if (!permissions.Contains((AuthPermissionClaim) claim))
                                                          {
                                                              isAuthenticated = false;
