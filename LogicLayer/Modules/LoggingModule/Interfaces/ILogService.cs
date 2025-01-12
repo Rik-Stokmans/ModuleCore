@@ -5,7 +5,7 @@ namespace LogicLayer.Modules.LoggingModule.Interfaces;
 
 public interface ILogService
 {
-    public Task<OperationResult> CreateLog(LogMessageObject logObject);
-    public Task<(OperationResult, List<LogMessageObject>)> GetLogs();
-    public Task<OperationResult> DeleteLogs();
+    public Task<OperationResult> CreateLog(LogMessageObject logObject, int retryCount = 0);
+    public Task<(OperationResult, List<LogMessageObject>)> GetLogs(int retryCount = 0);
+    public Task<OperationResult> DeleteLogs(int retryCount = 0);
 }

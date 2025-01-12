@@ -1,3 +1,4 @@
+using AzureDatabase.Interfaces;
 using LogicLayer.Authentication.Interfaces;
 using LogicLayer.CoreModels;
 using LogicLayer.Modules.LoggingModule.Models;
@@ -5,9 +6,11 @@ using Microsoft.Data.SqlClient;
 
 namespace AzureDatabase.Services;
 
-public class AzureAuthenticationService : IAuthenticationService
+public class AzureAuthenticationService : AzureDatabaseService, IAuthenticationService
 {
-    public async Task<(List<AuthPermissionClaim>, string)> GetPermissionsFromApiKey(string apiKey)
+    private const int MaxRetries = 3;
+    
+    public async Task<(List<AuthPermissionClaim>, string)> GetPermissionsFromApiKey(string apiKey, int retryCount = 0)
     {
         try
         {
@@ -16,7 +19,7 @@ public class AzureAuthenticationService : IAuthenticationService
             var client = "";
             var duration = new DateTime();
 
-            await using var command = new SqlCommand($"SELECT Token, Permissions, Client, Duration FROM Permissions WHERE Token = 'ApiKey-{apiKey}'", new DatabaseConnection().Connection);
+            await using var command = new SqlCommand($"SELECT Token, Permissions, Client, Duration FROM Permissions WHERE Token = 'apikey-{apiKey}'", new DatabaseConnection().Connection);
             await using var reader = await command.ExecuteReaderAsync();
 
             while (reader.Read())
@@ -39,14 +42,15 @@ public class AzureAuthenticationService : IAuthenticationService
 
             return (permissions, client);
         }
-        catch (Exception ex)
+        catch (SqlException ex)
         {
-            Console.WriteLine(ex.Message);
-            return ([], "");
+            if (!await HandleExceptions(ex, retryCount)) return ([], "");
+            
+            return await GetPermissionsFromApiKey(apiKey, retryCount + 1); // Retry after creating the table
         }
     }
 
-    public async Task<(List<AuthPermissionClaim>, string)> GetPermissionsFromBearer(string bearer)
+    public async Task<(List<AuthPermissionClaim>, string)> GetPermissionsFromBearer(string bearer, int retryCount = 0)
     {
         try
         {
@@ -77,18 +81,19 @@ public class AzureAuthenticationService : IAuthenticationService
 
             return (permissions, client);
         }
-        catch (Exception ex)
+        catch (SqlException ex)
         {
-            Console.WriteLine(ex.Message);
-            return ([], "");
+            if (!await HandleExceptions(ex, retryCount)) return ([], "");
+            
+            return await GetPermissionsFromBearer(bearer, retryCount + 1); // Retry after creating the table
         }
     }
 
-    public bool CreateBearerToken(string token, string permissionString, string client)
+    public async Task<bool> CreateBearerToken(string token, string permissionString, string client, int retryCount = 0)
     {
         try
         {
-            using var command = new SqlCommand("INSERT INTO Permissions (Token, Permissions, Client, Duration) VALUES (@Token, @Permissions, @Client, @Duration)", new DatabaseConnection().Connection);
+            await using var command = new SqlCommand("INSERT INTO Permissions (Token, Permissions, Client, Duration) VALUES (@Token, @Permissions, @Client, @Duration)", new DatabaseConnection().Connection);
             command.Parameters.AddWithValue("@Token", token);
             command.Parameters.AddWithValue("@Permissions", permissionString);
             command.Parameters.AddWithValue("@Client", client);
@@ -96,14 +101,15 @@ public class AzureAuthenticationService : IAuthenticationService
             command.ExecuteNonQuery();
             return true;
         }
-        catch (Exception ex)
+        catch (SqlException ex)
         {
-            Console.WriteLine(ex.Message);
-            return false;
+            if (!await HandleExceptions(ex, retryCount)) return false;
+            
+            return await CreateBearerToken(token, permissionString, client, retryCount + 1); // Retry after creating the table
         }
     }
 
-    public async Task<(string, List<PermissionClaim>, string)> GetUser(string username)
+    public async Task<(string, List<PermissionClaim>, string)> GetUser(string username, int retryCount = 0)
     {
         try
         {
@@ -126,23 +132,49 @@ public class AzureAuthenticationService : IAuthenticationService
 
             return (password, permissions, client);
         }
-        catch (Exception ex)
+        catch (SqlException ex)
         {
-            Console.WriteLine(ex.Message);
-            return ("", [], "");
+            if (!await HandleExceptions(ex, retryCount)) return ("", [], "");
+            
+            return await GetUser(username, retryCount + 1); // Retry after creating the table
         }
     }
 
-    private async Task RemoveExpiredToken(string token)
+    private async Task RemoveExpiredToken(string token, int retryCount = 0)
     {
         try
         {
             await using var command = new SqlCommand("DELETE FROM Permissions WHERE Token = '" + token + "'", new DatabaseConnection().Connection);
             command.ExecuteNonQuery();
         }
+        catch (SqlException ex)
+        {
+            if (!await HandleExceptions(ex, retryCount)) return;
+            
+            await RemoveExpiredToken(token, retryCount + 1); // Retry after creating the table
+        }
+    }
+
+    protected override async Task CreateTable(int retryCount = 0)
+    {
+        try
+        {
+            await using var command = new SqlCommand(@"
+            CREATE TABLE Permissionss (
+                token VARCHAR(MAX),
+                Permissions VARCHAR(MAX),
+                Client VARCHAR(MAX),
+                Duration DATETIME
+            )", new DatabaseConnection().Connection);
+            await command.ExecuteNonQueryAsync();
+        }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine($"Error creating table: {ex.Message}");
+            if (retryCount < MaxRetries)
+            {
+                await CreateTable(retryCount + 1); // Retry creating the table
+            }
         }
     }
 }

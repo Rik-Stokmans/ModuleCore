@@ -11,28 +11,28 @@ public class OperationResult(int code = 200, string message = "OK")
         return new OperationResult();
     }
     
-    public static OperationResult GetCreated()
+    public static OperationResult GetCreated(string message = "Created")
     {
-        return new OperationResult(201, "Created");
+        return new OperationResult(201, message);
     }
     
-    public static OperationResult GetNotModified()
+    public static OperationResult GetNotModified(string message = "Not Modified")
     {
-        return new OperationResult(304, "Not Modified");
+        return new OperationResult(304, message);
     }
 
-    public static OperationResult GetBadRequest()
+    public static OperationResult GetBadRequest(string message = "BadRequest")
     {
-        return new OperationResult(400, "BadRequest");
+        return new OperationResult(400, message);
     }
     
-    public static OperationResult GetUnauthorized()
+    public static OperationResult GetUnauthorized(string message = "Unauthorized")
     {
-        return new OperationResult(401, "Unauthorized");
+        return new OperationResult(401, message);
     }
 
-    public static OperationResult GetNotFound()
+    public static OperationResult GetNotFound(string message = "Not Found")
     {
-        return new OperationResult(404, "Not Found");
+        return new OperationResult(404, message);
     }
 }

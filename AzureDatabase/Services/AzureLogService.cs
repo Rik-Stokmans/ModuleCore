@@ -1,4 +1,5 @@
 using System.Data;
+using AzureDatabase.Interfaces;
 using LogicLayer.CoreModels;
 using LogicLayer.Modules.LoggingModule.Interfaces;
 using LogicLayer.Modules.LoggingModule.Models;
@@ -6,9 +7,11 @@ using Microsoft.Data.SqlClient;
 
 namespace AzureDatabase.Services;
 
-public class AzureLogService : ILogService
+public class AzureLogService : AzureDatabaseService, ILogService
 {
-    public async Task<OperationResult> CreateLog(LogMessageObject logObject)
+    private const int MaxRetries = 3;
+
+    public async Task<OperationResult> CreateLog(LogMessageObject logObject, int retryCount = 0)
     {
         try
         {
@@ -16,18 +19,20 @@ public class AzureLogService : ILogService
             command.Parameters.AddWithValue("@Message", logObject.Message);
             command.Parameters.AddWithValue("@Timestamp", logObject.Time);
 
-            var rowsAffected = command.ExecuteNonQuery();
+            var rowsAffected = await command.ExecuteNonQueryAsync();
             return rowsAffected > 0
                 ? OperationResult.GetSuccess()
                 : OperationResult.GetBadRequest();
         }
-        catch (Exception ex)
+        catch (SqlException ex)
         {
-            return OperationResult.GetBadRequest();
+            if (!await HandleExceptions(ex, retryCount)) return OperationResult.GetBadRequest();
+            
+            return await CreateLog(logObject, retryCount + 1); // Retry after creating the table
         }
     }
 
-    public async Task<(OperationResult, List<LogMessageObject>)> GetLogs()
+    public async Task<(OperationResult, List<LogMessageObject>)> GetLogs(int retryCount = 0)
     {
         try
         {
@@ -46,27 +51,55 @@ public class AzureLogService : ILogService
 
             return (OperationResult.GetSuccess(), logs);
         }
-        catch (Exception ex)
+        catch (SqlException ex)
         {
-            Console.WriteLine(ex.Message);
-            return (OperationResult.GetBadRequest(), []);
+            if (!await HandleExceptions(ex, retryCount)) return (OperationResult.GetBadRequest(), []);
+            
+            return await GetLogs(retryCount + 1); // Retry after creating the table
         }
     }
 
 
-    public Task<OperationResult> DeleteLogs()
+    public async Task<OperationResult> DeleteLogs(int retryCount = 0)
     {
         try
         {
-            using var command = new SqlCommand("DELETE FROM Logs", new DatabaseConnection().Connection);
+            await using var command = new SqlCommand("DELETE FROM Logs", new DatabaseConnection().Connection);
             var rowsAffected = command.ExecuteNonQuery();
-            return Task.FromResult(rowsAffected > 0
+            return await Task.FromResult(rowsAffected > 0
                 ? OperationResult.GetSuccess()
-                : OperationResult.GetBadRequest());
+                : OperationResult.GetBadRequest("No logs to delete"));
+        }
+        catch (SqlException ex)
+        {
+            if (!await HandleExceptions(ex, retryCount)) return OperationResult.GetBadRequest();
+            
+            return await DeleteLogs(retryCount + 1); // Retry after creating the table
+        }
+    }
+    
+    
+    //Interface implementation
+    protected override async Task CreateTable(int retryCount = 0)
+    {
+        try
+        {
+            await using var command = new SqlCommand(@"
+            CREATE TABLE Logs (
+                Timestamp DATETIME,
+                Message NVARCHAR(MAX)
+            )", new DatabaseConnection().Connection);
+            await command.ExecuteNonQueryAsync();
         }
         catch (Exception ex)
         {
-            return Task.FromResult(OperationResult.GetBadRequest());
+            Console.WriteLine($"Error creating table: {ex.Message}");
+            if (retryCount < MaxRetries)
+            {
+                await CreateTable(retryCount + 1); // Retry creating the table
+            }
         }
     }
+
+    
 }
