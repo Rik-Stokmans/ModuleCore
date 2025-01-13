@@ -10,11 +10,18 @@ using Microsoft.Extensions.Logging;
 namespace FunctionApi.Functions;
 
 
-    public class LoginUserObject
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
+public class LoginUserObject
+{
+    public string Username { get; set; }
+    public string Password { get; set; }
+}
+
+public class BearerTokenObject(string bearer, DateTime expires)
+{
+    public string Bearer { get; set; } = bearer;
+
+    public DateTime Expires { get; set; } = expires;
+}
 
 public class Login(ILogger<Login> logger)
 {
@@ -39,7 +46,7 @@ public class Login(ILogger<Login> logger)
             return new BadRequestObjectResult("Invalid JSON in request body.");
         }
 
-        var (success, token) = AuthenticationCore.LoginUser(requestData.Username, requestData.Password);
+        var (success, token, expires) = await AuthenticationCore.LoginUser(requestData.Username, requestData.Password);
         
         if (!success)
         {

@@ -89,21 +89,23 @@ public class AzureAuthenticationService : AzureDatabaseService, IAuthenticationS
         }
     }
 
-    public async Task<bool> CreateBearerToken(string token, string permissionString, string client, int retryCount = 0)
+    public async Task<DateTime> CreateBearerToken(string token, string permissionString, string client, int retryCount = 0)
     {
+        var expires = DateTime.Now.AddDays(7);
+        
         try
         {
             await using var command = new SqlCommand("INSERT INTO Permissions (Token, Permissions, Client, Duration) VALUES (@Token, @Permissions, @Client, @Duration)", new DatabaseConnection().Connection);
             command.Parameters.AddWithValue("@Token", token);
             command.Parameters.AddWithValue("@Permissions", permissionString);
             command.Parameters.AddWithValue("@Client", client);
-            command.Parameters.AddWithValue("@Duration", DateTime.Now.AddDays(7));
+            command.Parameters.AddWithValue("@Duration", expires);
             command.ExecuteNonQuery();
-            return true;
+            return expires;
         }
         catch (SqlException ex)
         {
-            if (!await HandleExceptions(ex, retryCount)) return false;
+            if (!await HandleExceptions(ex, retryCount)) return new DateTime();
             
             return await CreateBearerToken(token, permissionString, client, retryCount + 1); // Retry after creating the table
         }

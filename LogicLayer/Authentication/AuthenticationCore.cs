@@ -19,25 +19,27 @@ public static class AuthenticationCore
         return (permissions, client);
     }
 
-    public static (bool succes, string token) LoginUser(string username, string password)
+    public static async Task<(bool succes, string token, DateTime expires)> LoginUser(string username, string password)
     {
         var (dbPassword, permissions, client) = Core.GetService<IAuthenticationService>().GetUser(username).Result;
         
         if (dbPassword == password)
         {
-            return (true, CreateBearerToken(permissions, client));
+            var (token, expires) = await CreateBearerToken(permissions, client);
+            
+            return (true, token, expires);
         }
         
-        return (false, "");
+        return (false, "", new DateTime());
     }
 
-    private static string CreateBearerToken(List<PermissionClaim> permissions, string client)
+    private static async Task<(string, DateTime)> CreateBearerToken(List<PermissionClaim> permissions, string client)
     {
         var token = Guid.NewGuid().ToString();
         var permissionString = string.Join(',', permissions.Select(permission => (int) permission));
         
-        Core.GetService<IAuthenticationService>().CreateBearerToken("bearer-" + token, permissionString, client);
+        var expires = await Core.GetService<IAuthenticationService>().CreateBearerToken("bearer-" + token, permissionString, client);
         
-        return token;
+        return (token, expires);
     }
 }
