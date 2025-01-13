@@ -78,5 +78,4 @@ This project demonstrates a dynamic approach to generating Azure Functions based
 
 ## License
 
-This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International (CC BY-NC-ND 4.0).
-You may share it as long as you provide proper attribution, but you cannot modify or sell the code.
+This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International (CC BY-NC-ND 4.0). You may share it as long as you provide proper attribution, but you cannot modify or sell the code.
