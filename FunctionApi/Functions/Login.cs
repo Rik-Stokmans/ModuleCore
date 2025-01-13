@@ -53,6 +53,6 @@ public class Login(ILogger<Login> logger)
             return new UnauthorizedResult();
         }
         
-        return new OkObjectResult(token);
+        return new OkObjectResult(new BearerTokenObject(token, expires));
     }
 }
