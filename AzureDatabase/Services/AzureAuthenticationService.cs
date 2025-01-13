@@ -162,7 +162,7 @@ public class AzureAuthenticationService : AzureDatabaseService, IAuthenticationS
         try
         {
             await using var command = new SqlCommand(@"
-            CREATE TABLE Permissionss (
+            CREATE TABLE Permissions (
                 token VARCHAR(MAX),
                 Permissions VARCHAR(MAX),
                 Client VARCHAR(MAX),
