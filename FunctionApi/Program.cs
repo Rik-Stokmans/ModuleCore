@@ -4,7 +4,7 @@ using LogicLayer;
 using LogicLayer.Authentication.Interfaces;
 using LogicLayer.Modules.ChildFocusModule.Interfaces;
 using LogicLayer.Modules.LoggingModule.Interfaces;
-using LogicLayer.Modules.NuNlScraperModule.Interfaces;
+using LogicLayer.Modules.NewsScraperModule.Interfaces;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;

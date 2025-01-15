@@ -1,5 +1,5 @@
-using LogicLayer.Modules.NuNlScraperModule.Interfaces;
-using LogicLayer.Modules.NuNlScraperModule.Models;
+using LogicLayer.Modules.NewsScraperModule.Interfaces;
+using LogicLayer.Modules.NewsScraperModule.Models;
 
 namespace MockDataLayer.Services;
 
