@@ -25,8 +25,8 @@ public static class Program
             // Add more services as needed
         });
 
-        AzureFunctionGenerator.GenerateFunctions();
-        Console.WriteLine("Function generation completed.");
+        //AzureFunctionGenerator.GenerateFunctions();
+        //Console.WriteLine("Function generation completed.");
 
         var host = new HostBuilder()
             .ConfigureFunctionsWebApplication()
