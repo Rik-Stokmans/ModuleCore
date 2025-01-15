@@ -1,7 +1,7 @@
 {
     "IsEncrypted": false,
     "Values": {
-        "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=storageaccountxpo;AccountKey=3j3yqFRA9Xml4YlXhBcRU7qH//nIrD5E+SXJT41uIeKsHMkJebw3Oj9g6sLKSx8y1B7HfGNpSPU/+ASt5pWiyA==;EndpointSuffix=core.windows.net",
+        "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=storageaccountxpo;AccountKey=H3e81/s2dq/QSpTKrA9ZoqbPlA2ll9v/9w+YI0ORlE0SAPkR9QrmkHwO5CP3tC8tOz7nsGHipf+p+ASt8AQuNw==;EndpointSuffix=core.windows.net",
         "FUNCTIONS_WORKER_RUNTIME": "dotnet"
     },
     "Host": {
