@@ -7,7 +7,7 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_NAME: 'AzureFunctionsXPO'   # Set this to your Azure Function App name
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: './FunctionApi'           # Set the path to your Function App project (defaults to the root directory)
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'           # Set the path to your Function App project (defaults to the root directory)
   DOTNET_VERSION: '8.0.x'                       # Set the DotNet version you want to use
 
 jobs:
