@@ -78,5 +78,3 @@ appsettings.*
 external-data-dbi529428_studmysql01_fhict_local.xml
 
 *.idea/*
-
-/LogicLayer/Modules/
