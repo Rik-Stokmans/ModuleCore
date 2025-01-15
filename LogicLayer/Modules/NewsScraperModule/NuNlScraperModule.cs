@@ -14,4 +14,5 @@ public class NewsScraperModule
         
         return (OperationResult.GetSuccess(), newsObjects);
     }
+    
 }
