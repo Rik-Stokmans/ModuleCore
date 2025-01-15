@@ -125,7 +125,7 @@ namespace FunctionApi
                                      using Microsoft.Extensions.Logging;
                                      using static Authenticator.Authenticator;
                      
-                                     namespace FunctionApi.bin.Debug.net8._0.Generated
+                                     namespace FunctionApi.Generated
                                      {
                                          {{dtoClassCode}}
                      
@@ -205,7 +205,16 @@ namespace FunctionApi
                                      """;
 
                 // Write to a file
-                File.WriteAllText($"Generated/{classname}.cs", functionCode);
+                //File.WriteAllText($"Generated/{classname}.cs", functionCode);
+                
+                var projectDir = Directory.GetParent(AppContext.BaseDirectory)?.Parent?.Parent?.Parent?.FullName;
+                
+                Console.WriteLine(projectDir);
+                
+                if (projectDir == null) continue;
+                var generatedPath = Path.Combine(projectDir, "Generated");
+                Directory.CreateDirectory(generatedPath); // Ensure the directory exists
+                File.WriteAllText(Path.Combine(generatedPath, $"{classname}.cs"), functionCode);
             }
         }
     }

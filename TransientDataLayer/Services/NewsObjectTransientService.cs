@@ -32,7 +32,7 @@ public class NewsObjectTransientService : INewsObjectService
             return fetchedNewsObjects;
         }
 
-        return new List<NuNlObject>();
+        return [];
     }
 
     private List<NuNlObject> TryFetchNewsObjects(string category)
