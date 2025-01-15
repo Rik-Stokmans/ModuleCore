@@ -1,6 +1,6 @@
+using System.Collections;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-
 
 namespace AzureDatabase
 {
@@ -10,12 +10,24 @@ namespace AzureDatabase
 
         public DatabaseConnection()
         {
+            // Building the configuration and adding environment variables
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .SetBasePath(Directory.GetCurrentDirectory()) // Optional: Set base path for configuration
+                //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true) // Load from appsettings.json (if available)
+                .AddEnvironmentVariables() // Correct method to load environment variables
                 .Build();
 
-            Connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
+            // Retrieve the connection string from environment variables (if set)
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                Console.WriteLine("Connection string not found.");
+                return;
+            }
+
+            // Use the connection string to establish a SQL connection
+            Connection = new SqlConnection(connectionString);
 
             try
             {
