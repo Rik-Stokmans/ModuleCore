@@ -46,4 +46,5 @@ namespace AzureDatabase
             Console.WriteLine("Connection closed.");
         }
     }
+    
 }
