@@ -1,8 +1,8 @@
 {
     "IsEncrypted": false,
     "Values": {
-        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+        "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=storageaccountxpo;AccountKey=3j3yqFRA9Xml4YlXhBcRU7qH//nIrD5E+SXJT41uIeKsHMkJebw3Oj9g6sLKSx8y1B7HfGNpSPU/+ASt5pWiyA==;EndpointSuffix=core.windows.net",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet"
     },
     "Host": {
         "CORS": "http://localhost:63343",
