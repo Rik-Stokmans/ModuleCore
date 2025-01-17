@@ -1,4 +1,3 @@
-using LogicLayer;
 using LogicLayer.Authentication;
 using LogicLayer.CoreModels;
 

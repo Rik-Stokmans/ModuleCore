@@ -1,12 +1,8 @@
 using System.Text.Json;
-using AzureDatabase;
-using LogicLayer;
 using LogicLayer.Authentication;
-using LogicLayer.Authentication.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace FunctionApi.Functions;

@@ -2,7 +2,6 @@ using System.Reflection;
 using System.Text.Json;
 using LogicLayer.CoreModels;
 using LogicLayer.Modules.NewsScraperModule;
-using LogicLayer.Modules.NewsScraperModule.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;

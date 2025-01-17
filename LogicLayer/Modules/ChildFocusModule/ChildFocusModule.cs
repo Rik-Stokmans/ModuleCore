@@ -1,8 +1,6 @@
 using LogicLayer.CoreModels;
 using LogicLayer.Modules.ChildFocusModule.Interfaces;
-using LogicLayer.Modules.ChildFocusModule.Methods;
 using LogicLayer.Modules.ChildFocusModule.Models;
-using LogicLayer.Modules.LoggingModule.Interfaces;
 using LogicLayer.Modules.ModuleCollectionBuilder.Models;
 
 namespace LogicLayer.Modules.ChildFocusModule;

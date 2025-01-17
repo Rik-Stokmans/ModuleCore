@@ -1,4 +1,3 @@
-using System.Data;
 using AzureDatabase.Interfaces;
 using LogicLayer.CoreModels;
 using LogicLayer.Modules.LoggingModule.Interfaces;

@@ -1,8 +1,6 @@
 using System.Reflection;
-using System.Text.Json;
 using LogicLayer.CoreModels;
 using LogicLayer.Modules.ChildFocusModule;
-using LogicLayer.Modules.ChildFocusModule.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;

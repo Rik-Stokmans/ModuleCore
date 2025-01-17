@@ -100,7 +100,6 @@ namespace FunctionApi.Generated
                 4 => new BadRequestObjectResult(result),
                 _ => new StatusCodeResult(result.Code)
             };
-                    
         }
     }
 }

@@ -1,20 +1,16 @@
 using AzureDatabase.Services;
-using FunctionApi;
 using LogicLayer;
 using LogicLayer.Authentication.Interfaces;
 using LogicLayer.Modules.ChildFocusModule.Interfaces;
 using LogicLayer.Modules.LoggingModule.Interfaces;
 using LogicLayer.Modules.NewsScraperModule.Interfaces;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using MockDataLayer.Services;
-
-[assembly: FunctionsStartup(typeof(Startup))]
 
 namespace FunctionApi
 {
-    public class Startup : FunctionsStartup
+    public static class Startup
     {
-        public override void Configure(IFunctionsHostBuilder builder)
+        public static void startup()
         {
             Core.Init(registry =>
             {
