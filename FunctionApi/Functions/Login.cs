@@ -28,7 +28,7 @@ public class BearerTokenObject(string bearer, DateTime expires)
 public class Login(ILogger<Login> logger)
 {
     [Function("Login")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req)
     {
         logger.LogInformation("Processing request for Login.");
         
