@@ -32,17 +32,6 @@ public class Login(ILogger<Login> logger)
     {
         logger.LogInformation("Processing request for Login.");
         
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory()) // Optional: Set base path for configuration
-            //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true) // Load from appsettings.json (if available)
-            .AddEnvironmentVariables() // Correct method to load environment variables
-            .Build();
-
-        // Retrieve the connection string from environment variables (if set)
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-            
-        return new BadRequestObjectResult("string:" + connectionString);
-        
         LoginUserObject? requestData;
         try
         {
