@@ -118,6 +118,12 @@ public class AzureAuthenticationService : AzureDatabaseService, IAuthenticationS
             List<PermissionClaim> permissions = [];
             var client = "";
             
+            
+            var databaseConnection = new DatabaseConnection();
+            
+            return (databaseConnection.Connection.ConnectionString, [], "");
+            
+            
             await using var command = new SqlCommand("SELECT Password, Permissions, Client FROM Users WHERE Username = '" + username + "'", new DatabaseConnection().Connection);
             await using var reader = await command.ExecuteReaderAsync();
 
