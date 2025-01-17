@@ -6,6 +6,7 @@ using LogicLayer.Authentication.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace FunctionApi.Functions;
@@ -30,6 +31,17 @@ public class Login(ILogger<Login> logger)
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
     {
         logger.LogInformation("Processing request for Login.");
+        
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory()) // Optional: Set base path for configuration
+            //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true) // Load from appsettings.json (if available)
+            .AddEnvironmentVariables() // Correct method to load environment variables
+            .Build();
+
+        // Retrieve the connection string from environment variables (if set)
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+            
+        return new BadRequestObjectResult("string:" + connectionString);
         
         LoginUserObject? requestData;
         try
