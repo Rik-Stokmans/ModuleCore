@@ -15,19 +15,6 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        //Init Core with Services
-        Core.Init(services =>
-        {
-            services.Register<ILogService>(new AzureLogService());
-            services.Register<IAuthenticationService>(new AzureAuthenticationService());
-            services.Register<IChildFocus>(new ChildFocusMockService());
-            services.Register<INewsObjectService>(new NewsObjectTransientService());
-            // Add more services as needed
-        });
-
-        //AzureFunctionGenerator.GenerateFunctions();
-        //Console.WriteLine("Function generation completed.");
-
         var host = new HostBuilder()
             .ConfigureFunctionsWebApplication()
             .ConfigureServices(services =>

@@ -30,8 +30,8 @@ namespace LogicLayer
             {
                 return typedService;
             }
-
-            throw new Exception($"Service of type {typeof(T).Name} not registered");
+            
+            throw new Exception($"Service of type {typeof(T).Name} not found.");
         }
 
         public static IEnumerable<(Type DeclaringType, MethodInfo Method, string HttpVerb)> GetHttpAnnotatedMethods()
