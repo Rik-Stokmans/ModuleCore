@@ -31,7 +31,7 @@ public static class AuthenticationCore
         }
         catch (Exception e)
         {
-            return (true, "", new DateTime());
+            return (false, e.ToString(), new DateTime());
         }
 
         if (dbPassword == password)

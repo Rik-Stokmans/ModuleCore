@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using OkObjectResult = Microsoft.AspNetCore.Mvc.OkObjectResult;
 
 namespace FunctionApi.Functions;
 
@@ -48,7 +49,7 @@ public class Login(ILogger<Login> logger)
         
         if (!success)
         {
-            return new UnauthorizedResult();
+            return new OkObjectResult((token));
         }
         
         return new OkObjectResult(new BearerTokenObject(token, expires));
