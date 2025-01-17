@@ -21,8 +21,19 @@ public static class AuthenticationCore
 
     public static async Task<(bool succes, string token, DateTime expires)> LoginUser(string username, string password)
     {
-        var (dbPassword, permissions, client) = Core.GetService<IAuthenticationService>().GetUser(username).Result;
+        string dbPassword;
+        List<PermissionClaim> permissions;
+        string client;
         
+        try
+        {
+            (dbPassword, permissions, client) = Core.GetService<IAuthenticationService>().GetUser(username).Result;
+        }
+        catch (Exception e)
+        {
+            return (false, "", new DateTime());
+        }
+
         if (dbPassword == password)
         {
             var (token, expires) = await CreateBearerToken(permissions, client);
