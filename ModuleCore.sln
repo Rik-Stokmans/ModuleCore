@@ -2,13 +2,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicLayer", "LogicLayer\LogicLayer.csproj", "{4A167573-8D15-4D78-82EF-409CF5057C20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransientDataLayer", "TransientDataLayer\TransientDataLayer.csproj", "{FA0ACDF2-B857-419C-865F-D8EDE25D7CAA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{7E642DEC-E40E-42AB-8E42-688427694106}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionApi", "FunctionApi\FunctionApi.csproj", "{02D010F7-B75B-45EC-9C0C-3FA9E1BE1613}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{F4F1BDE8-C837-443C-A9D0-05F7F2E5E699}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authenticator", "Authenticator\Authenticator.csproj", "{D6DE474D-FFDB-4463-8D9E-ACBA155EDC15}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureDatabase", "AzureDatabase\AzureDatabase.csproj", "{83479E4A-3EFE-459B-99EA-F67DB2E8D746}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountData", "AccountData\AccountData.csproj", "{ECADD72D-CFF9-40AB-A391-16DA1EE4BD44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,21 +18,17 @@ Global
 		{4A167573-8D15-4D78-82EF-409CF5057C20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A167573-8D15-4D78-82EF-409CF5057C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A167573-8D15-4D78-82EF-409CF5057C20}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA0ACDF2-B857-419C-865F-D8EDE25D7CAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA0ACDF2-B857-419C-865F-D8EDE25D7CAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA0ACDF2-B857-419C-865F-D8EDE25D7CAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA0ACDF2-B857-419C-865F-D8EDE25D7CAA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02D010F7-B75B-45EC-9C0C-3FA9E1BE1613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02D010F7-B75B-45EC-9C0C-3FA9E1BE1613}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02D010F7-B75B-45EC-9C0C-3FA9E1BE1613}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02D010F7-B75B-45EC-9C0C-3FA9E1BE1613}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D6DE474D-FFDB-4463-8D9E-ACBA155EDC15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6DE474D-FFDB-4463-8D9E-ACBA155EDC15}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6DE474D-FFDB-4463-8D9E-ACBA155EDC15}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D6DE474D-FFDB-4463-8D9E-ACBA155EDC15}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83479E4A-3EFE-459B-99EA-F67DB2E8D746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83479E4A-3EFE-459B-99EA-F67DB2E8D746}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83479E4A-3EFE-459B-99EA-F67DB2E8D746}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83479E4A-3EFE-459B-99EA-F67DB2E8D746}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E642DEC-E40E-42AB-8E42-688427694106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E642DEC-E40E-42AB-8E42-688427694106}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E642DEC-E40E-42AB-8E42-688427694106}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E642DEC-E40E-42AB-8E42-688427694106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4F1BDE8-C837-443C-A9D0-05F7F2E5E699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4F1BDE8-C837-443C-A9D0-05F7F2E5E699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4F1BDE8-C837-443C-A9D0-05F7F2E5E699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4F1BDE8-C837-443C-A9D0-05F7F2E5E699}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECADD72D-CFF9-40AB-A391-16DA1EE4BD44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECADD72D-CFF9-40AB-A391-16DA1EE4BD44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECADD72D-CFF9-40AB-A391-16DA1EE4BD44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECADD72D-CFF9-40AB-A391-16DA1EE4BD44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

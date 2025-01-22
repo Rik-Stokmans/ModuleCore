@@ -6,7 +6,7 @@ namespace MockDataLayer.Services;
 
 public class NewsObjectTransientService : INewsObjectService
 {
-    private Dictionary<Country, string> NewsEndPoints { get; set; } = new()
+    private static Dictionary<Country, string> NewsEndPoints { get; set; } = new()
     {
         { Country.Netherlands, "https://www.nu.nl/rss/Algemeen" },
         { Country.Germany, "https://www.tagesschau.de/infoservices/alle-meldungen-100~rss2.xml" },
