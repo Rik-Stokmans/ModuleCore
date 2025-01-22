@@ -8,10 +8,10 @@ public class NewsObjectTransientService : INewsObjectService
 {
     private Dictionary<Country, string> NewsEndPoints { get; set; } = new()
     {
-        { Country.Nl, "https://www.nu.nl/rss/Algemeen" },
-        { Country.De, "https://www.tagesschau.de/infoservices/alle-meldungen-100~rss2.xml" },
-        { Country.Le, "https://www.apollo.lv/rss" },
-        { Country.Ro, "http://rss.realitatea.net/homepage.xml" }
+        { Country.Netherlands, "https://www.nu.nl/rss/Algemeen" },
+        { Country.Germany, "https://www.tagesschau.de/infoservices/alle-meldungen-100~rss2.xml" },
+        { Country.Latvia, "https://www.apollo.lv/rss" },
+        { Country.Romania, "http://rss.realitatea.net/homepage.xml" }
     };
 
     public async Task<Dictionary<Country, List<NewsObject>>> GetNewsObjects()

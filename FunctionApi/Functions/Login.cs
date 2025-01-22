@@ -1,9 +1,13 @@
+using System.Net;
 using System.Text.Json;
 using LogicLayer.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using OkObjectResult = Microsoft.AspNetCore.Mvc.OkObjectResult;
 
 namespace FunctionApi.Functions;
@@ -25,7 +29,10 @@ public class BearerTokenObject(string bearer, DateTime expires)
 public class Login(ILogger<Login> logger)
 {
     [Function("Login")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req)
+    [OpenApiOperation(operationId: "GetWeather", tags: new[] { "Weather" })]
+    [OpenApiParameter(name: "city", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "City name")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Weather data")]
+    public async Task<IActionResult> Run([Microsoft.Azure.Functions.Worker.HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req)
     {
         logger.LogInformation("Processing request for Login.");
         
