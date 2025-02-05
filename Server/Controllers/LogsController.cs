@@ -22,9 +22,10 @@ public class LogsController(Context context) : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<List<LoggingView>>> GetLogsAsync()
+    [Route("/Logs/{amount:int:range(1,100)}")]
+    public async Task<ActionResult<List<LoggingView>>> GetLogsAsync(int amount = 20)
     {
-        var logs = await context.LogMessages.ToListAsync();
+        var logs = await context.LogMessages.OrderByDescending(log => log.Time).Take(amount).ToListAsync();
         var logViews = logs.Select(log => log.GetLogView()).ToList();
         
         return Ok(logViews);

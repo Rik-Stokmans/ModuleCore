@@ -14,26 +14,31 @@
 !/packages/*/lib/*/*.dll
 # Include dlls if they're in the CommonReferences directory
 !*CommonReferences/*.dll
+
 ####################
 # VS Upgrade stuff #
 ####################
 UpgradeLog.XML
 _UpgradeReport_Files/
+
 ###############
 # Directories #
 ###############
 bin/
 obj/
 TestResults/
+
 ###################
 # Web publish log #
 ###################
 *.Publish.xml
+
 #############
 # Resharper #
 #############
 /_ReSharper.*
 *.ReSharper.*
+
 ############
 # Packages #
 ############
@@ -47,11 +52,13 @@ TestResults/
 *.rar
 *.tar
 *.zip
+
 ######################
 # Logs and databases #
 ######################
 *.log
 *.sqlite
+
 # OS generated files #
 ######################
 .DS_Store?
@@ -78,3 +85,5 @@ appsettings.*
 external-data-dbi529428_studmysql01_fhict_local.xml
 
 *.idea/*
+/Server/AccountDatabase
+/Server/TestDatabase
