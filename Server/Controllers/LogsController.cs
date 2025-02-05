@@ -13,6 +13,8 @@ public class LogsController(Context context) : ControllerBase
 {
     [Authorize]
     [HttpPost]
+    [Route("{message}")]
+
     public async Task<ActionResult> CreateLogAsync(string message)
     {
         await context.LogMessages.AddAsync(new LogMessage(message));
@@ -22,7 +24,7 @@ public class LogsController(Context context) : ControllerBase
     }
     
     [HttpGet]
-    [Route("/Logs/{amount:int:range(1,100)}")]
+    [Route("{amount:int:range(1,100)}")]
     public async Task<ActionResult<List<LoggingView>>> GetLogsAsync(int amount = 20)
     {
         var logs = await context.LogMessages.OrderByDescending(log => log.Time).Take(amount).ToListAsync();

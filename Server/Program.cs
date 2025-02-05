@@ -14,6 +14,15 @@ public static class Program
         builder.Configuration.AddEnvironmentVariables();
         builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
         
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll",
+                policy => policy.WithOrigins("http://localhost:63343") // Change to your frontend URL
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()); // Required for cookies
+        });
+        
         // Retrieve the connection string from environment variables (if set)
         var genericDbConnectionString = builder.Configuration.GetConnectionString("SqliteDefaultConnectionString");
         
@@ -43,6 +52,8 @@ public static class Program
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+        
+        app.UseCors("AllowAll");
         
         // Migrate/Create the database
         using (var scope = app.Services.CreateScope())

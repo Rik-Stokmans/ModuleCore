@@ -42,4 +42,12 @@ public class AccountController(AccountContext accountContext, SignInManager<Iden
         
         return Unauthorized();
     }
+    
+    [Route("Logout")]
+    [HttpPost]
+    public async Task<ActionResult> LogoutAsync()
+    {
+        await signInManager.SignOutAsync();
+        return Ok();
+    }
 }
