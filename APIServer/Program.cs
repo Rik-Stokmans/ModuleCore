@@ -66,15 +66,17 @@ public static class Program
             var context = scope.ServiceProvider.GetRequiredService<Context>();
             var accountContext = scope.ServiceProvider.GetRequiredService<AccountContext>();
 
+            context.Database.EnsureCreated();
+            
             // Check if database supports migrations
-            if (context.Database.IsRelational())
-            {
-                context.Database.Migrate();
-            }
-            else
-            {
-                context.Database.EnsureCreated();
-            }
+            // if (context.Database.IsRelational())
+            // {
+            //     context.Database.Migrate();
+            // }
+            // else
+            // {
+            //     context.Database.EnsureCreated();
+            // }
             
             // Check if database supports migrations
             if (accountContext.Database.IsRelational())

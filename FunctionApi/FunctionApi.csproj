@@ -50,6 +50,7 @@
       <ProjectReference Include="..\TransientDataLayer\TransientDataLayer.csproj" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Functions\CronTriggers\" />
       <Folder Include="Generated\" />
     </ItemGroup>
 </Project>
