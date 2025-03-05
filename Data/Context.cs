@@ -1,9 +1,15 @@
 using LogicLayer.Modules.LoggingModule.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace EntityFramework;
-
-public class Context(DbContextOptions<Context> options) : DbContext(options)
+namespace EntityFramework
 {
-    public DbSet<LogMessage> LogMessages { get; set; }
+    public class Context : DbContext
+    {
+        public Context(DbContextOptions<Context> options) : base(options)
+        {
+        }
+        
+        public DbSet<Feedback> FeedbackConditions { get; set; }
+        public DbSet<Location> ScreenLocations { get; set; }
+    }
 }

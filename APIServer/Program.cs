@@ -2,6 +2,8 @@ using AccountData;
 using EntityFramework;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Server;
 
@@ -29,12 +31,14 @@ public static class Program
         builder.Services.AddDbContext<Context>(options =>
         {
             options.UseSqlite(genericDbConnectionString);
+            // options.UseAzureSql(genericDbConnectionString);
         });
         
         var accountDbConnectionString = builder.Configuration.GetConnectionString("SqliteAccountConnectionString");
         builder.Services.AddDbContext<AccountContext>(options =>
         {
             options.UseSqlite(accountDbConnectionString);
+            // options.UseAzureSql(accountDbConnectionString);
         });
 
         builder.Services.AddAuthorization();
@@ -90,11 +94,14 @@ public static class Program
         }
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        // if (app.Environment.IsDevelopment())
+        // {
+        //     app.UseSwagger();
+        //     app.UseSwaggerUI();
+        // }
+        
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseHttpsRedirection();
         app.UseAuthorization();

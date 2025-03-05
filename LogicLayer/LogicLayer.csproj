@@ -11,12 +11,4 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Modules\NewsScraperModule\Models\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\ModuleBuilder\ModuleBuilder.csproj" />
-    </ItemGroup>
-
 </Project>
