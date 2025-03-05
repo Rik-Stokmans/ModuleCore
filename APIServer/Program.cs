@@ -23,22 +23,35 @@ public static class Program
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()); // Required for cookies
+            options.AddPolicy("AllowAll",
+                policy => policy.WithOrigins("feedbackapplication-gkcgf5dudcekh7an.westeurope-01.azurewebsites.net") // Change to your frontend URL
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()); // Required for cookies
         });
-        
-        // Retrieve the connection string from environment variables (if set)
-        var genericDbConnectionString = builder.Configuration.GetConnectionString("SqliteDefaultConnectionString");
         
         builder.Services.AddDbContext<Context>(options =>
         {
-            options.UseSqlite(genericDbConnectionString);
-            // options.UseAzureSql(genericDbConnectionString);
+            if (builder.Environment.IsDevelopment())
+            {
+                options.UseSqlite(builder.Configuration.GetConnectionString("SqliteDefaultConnectionString"));
+            }
+            else
+            {
+                options.UseAzureSql(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"));
+            }
         });
         
-        var accountDbConnectionString = builder.Configuration.GetConnectionString("SqliteAccountConnectionString");
         builder.Services.AddDbContext<AccountContext>(options =>
         {
-            options.UseSqlite(accountDbConnectionString);
-            // options.UseAzureSql(accountDbConnectionString);
+            if (builder.Environment.IsDevelopment())
+            {
+                options.UseSqlite(builder.Configuration.GetConnectionString("SqliteAccountConnectionString"));
+            } 
+            else 
+            {
+                options.UseAzureSql(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"));
+            }
         });
 
         builder.Services.AddAuthorization();
@@ -71,6 +84,7 @@ public static class Program
             var accountContext = scope.ServiceProvider.GetRequiredService<AccountContext>();
 
             context.Database.EnsureCreated();
+            accountContext.Database.EnsureCreated();
             
             // Check if database supports migrations
             // if (context.Database.IsRelational())
@@ -83,14 +97,14 @@ public static class Program
             // }
             
             // Check if database supports migrations
-            if (accountContext.Database.IsRelational())
-            {
-                accountContext.Database.Migrate();
-            }
-            else
-            {
-                accountContext.Database.EnsureCreated();
-            }
+            // if (accountContext.Database.IsRelational())
+            // {
+            //     accountContext.Database.Migrate();
+            // }
+            // else
+            // {
+            //     accountContext.Database.EnsureCreated();
+            // }
         }
 
         // Configure the HTTP request pipeline.
