@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicLayer", "LogicLayer\Lo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{7E642DEC-E40E-42AB-8E42-688427694106}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{F4F1BDE8-C837-443C-A9D0-05F7F2E5E699}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIServer", "APIServer\APIServer.csproj", "{F4F1BDE8-C837-443C-A9D0-05F7F2E5E699}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountData", "AccountData\AccountData.csproj", "{ECADD72D-CFF9-40AB-A391-16DA1EE4BD44}"
 EndProject
