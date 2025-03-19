@@ -15,4 +15,14 @@ public static class FeedbackViewExtensions
     {
         return new FeedbackView(feedbackObject.Time, feedbackObject.ScreenId, feedbackObject.Condition);
     }
+    
+    public static Feedback Convert(this FeedbackView feedbackView)
+    {
+        return new Feedback(feedbackView.Condition, feedbackView.ScreenId, feedbackView.Time);
+    }
+    
+    public static List<FeedbackView> Convert(this List<Feedback> feedbacks)
+    {
+        return feedbacks.Select(feedback => feedback.GetFeedbackView()).ToList();
+    }
 }

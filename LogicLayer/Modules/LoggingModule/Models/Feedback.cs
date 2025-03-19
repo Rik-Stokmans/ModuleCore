@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace LogicLayer.Modules.LoggingModule.Models;
