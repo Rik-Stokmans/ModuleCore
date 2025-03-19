@@ -18,8 +18,14 @@ public static class Program
         
         builder.Services.AddCors(options =>
         {
+            //for production use
             options.AddPolicy("AllowAll",
                 policy => policy.WithOrigins("https://feedbackappapi-bxhpcgggcffaa3gu.westeurope-01.azurewebsites.net") // Change to your frontend URL
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()); // Required for cookies
+            options.AddPolicy("AllowAll",
+                policy => policy.WithOrigins("http://localhost:63342") // Change to your frontend URL
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()); // Required for cookies

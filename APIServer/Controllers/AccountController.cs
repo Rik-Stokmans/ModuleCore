@@ -25,7 +25,7 @@ public class AccountController(AccountContext accountContext, SignInManager<Iden
         {
             return Ok();
         }
-        
+         
         return BadRequest();
     }
     
