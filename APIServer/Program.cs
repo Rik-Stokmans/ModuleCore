@@ -103,6 +103,6 @@ public static class Program
 
         app.MapControllers();
 
-        app.Run();
+        app.Run("http://0.0.0.0:8080"); 
     }
 }
