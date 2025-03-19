@@ -9,25 +9,25 @@ namespace Server.Controllers;
 [ApiController]
 public class AccountController(AccountContext accountContext, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager) : ControllerBase
 {
-    // [Route("Register")]
-    // [HttpPost]
-    // public async Task<ActionResult> RegisterAsync(string email, string password)
-    // {
-    //     var user = new IdentityUser
-    //     {
-    //         UserName = email,
-    //         Email = email
-    //     };
-    //     
-    //     var result = await userManager.CreateAsync(user, password);
-    //     
-    //     if (result.Succeeded)
-    //     {
-    //         return Ok();
-    //     }
-    //     
-    //     return BadRequest();
-    // }
+    [Route("Register")]
+    [HttpPost]
+    public async Task<ActionResult> RegisterAsync(string email, string password)
+    {
+        var user = new IdentityUser
+        {
+            UserName = email,
+            Email = email
+        };
+        
+        var result = await userManager.CreateAsync(user, password);
+        
+        if (result.Succeeded)
+        {
+            return Ok();
+        }
+        
+        return BadRequest();
+    }
     
     [Route("Login")]
     [HttpPost]

@@ -23,35 +23,16 @@ public static class Program
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()); // Required for cookies
-            options.AddPolicy("AllowAll",
-                policy => policy.WithOrigins("feedbackapplication-gkcgf5dudcekh7an.westeurope-01.azurewebsites.net") // Change to your frontend URL
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials()); // Required for cookies
         });
         
         builder.Services.AddDbContext<Context>(options =>
         {
-            if (builder.Environment.IsDevelopment())
-            {
-                options.UseSqlite(builder.Configuration.GetConnectionString("SqliteDefaultConnectionString"));
-            }
-            else
-            {
-                options.UseAzureSql(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"));
-            }
+            options.UseAzureSql(builder.Configuration.GetConnectionString("AzureSqlDataConnectionString"));
         });
         
         builder.Services.AddDbContext<AccountContext>(options =>
         {
-            if (builder.Environment.IsDevelopment())
-            {
-                options.UseSqlite(builder.Configuration.GetConnectionString("SqliteAccountConnectionString"));
-            } 
-            else 
-            {
-                options.UseAzureSql(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"));
-            }
+            options.UseAzureSql(builder.Configuration.GetConnectionString("AzureSqlAccountConnectionString"));
         });
 
         builder.Services.AddAuthorization();
