@@ -19,7 +19,7 @@ public static class Program
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll",
-                policy => policy.WithOrigins("http://localhost:63343") // Change to your frontend URL
+                policy => policy.WithOrigins("https://feedbackappapi-bxhpcgggcffaa3gu.westeurope-01.azurewebsites.net") // Change to your frontend URL
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()); // Required for cookies
