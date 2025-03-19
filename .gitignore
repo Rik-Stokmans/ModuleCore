@@ -81,7 +81,7 @@ _[Ss]cripts
 *.ncrunchsolution
 *.dot[Cc]over
 
-appsettings.*
+appsettings.Development.*
 external-data-dbi529428_studmysql01_fhict_local.xml
 
 *.idea/*
