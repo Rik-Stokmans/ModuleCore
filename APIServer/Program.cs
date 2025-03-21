@@ -19,13 +19,19 @@ public static class Program
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll",
-                policy => policy.WithOrigins(
-                        "https://feedbackappapi-bxhpcgggcffaa3gu.westeurope-01.azurewebsites.net",
-                        "http://localhost:63343") // Add multiple origins here
+                policy => policy.WithOrigins("http://localhost:63343") // Add multiple origins here
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()); // Required for cookies
         });
+        
+        builder.Services.ConfigureApplicationCookie(options =>
+        {
+            options.Cookie.HttpOnly = true;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔥 Required for HTTPS
+            options.Cookie.SameSite = SameSiteMode.None;  // 🔥 Required for cross-origin requests
+        });
+
 
         
         builder.Services.AddDbContext<Context>(options =>
