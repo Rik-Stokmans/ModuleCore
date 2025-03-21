@@ -21,7 +21,7 @@ public static class Program
             options.AddPolicy("AllowAll",
                 policy => policy.WithOrigins(
                         "https://feedbackappapi-bxhpcgggcffaa3gu.westeurope-01.azurewebsites.net",
-                        "http://localhost:63342") // Add multiple origins here
+                        "http://localhost:63343") // Add multiple origins here
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()); // Required for cookies
