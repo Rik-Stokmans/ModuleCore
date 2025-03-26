@@ -28,8 +28,10 @@ public static class Program
         builder.Services.ConfigureApplicationCookie(options =>
         {
             options.Cookie.HttpOnly = true;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔥 Required for HTTPS
+            options.Cookie.SecurePolicy = CookieSecurePolicy.None; // 🔥 Required for HTTPS
             options.Cookie.SameSite = SameSiteMode.None;  // 🔥 Required for cross-origin requests
+            options.Cookie.Path = "/";
+            options.Cookie.Domain = "localhost"; // Add if needed
         });
 
 
