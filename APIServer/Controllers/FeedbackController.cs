@@ -18,7 +18,7 @@ public class FeedbackController(Context context) : ControllerBase
         //check if the database contains the screenId
         if (!await context.ScreenLocations.AnyAsync(location => location.ScreenId == screenId))
         {
-            return NotFound("screenId not found");
+            return NotFound();
         }
         
         await context.FeedbackConditions.AddAsync(new Feedback(condition, screenId));
