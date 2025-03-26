@@ -19,20 +19,21 @@ public static class Program
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll",
-                policy => policy.WithOrigins("http://localhost:63343") // Add multiple origins here
+                policy => policy.WithOrigins("https://localhost:3000") // Match frontend URL
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    .AllowCredentials()); // Required for cookies
+                    .AllowCredentials()); // 🔥 Required for cookies
         });
+
         
         builder.Services.ConfigureApplicationCookie(options =>
         {
             options.Cookie.HttpOnly = true;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.None; // 🔥 Required for HTTPS
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔥 Required for HTTPS
             options.Cookie.SameSite = SameSiteMode.None;  // 🔥 Required for cross-origin requests
             options.Cookie.Path = "/";
-            options.Cookie.Domain = "localhost"; // Add if needed
         });
+
 
 
         
@@ -114,6 +115,6 @@ public static class Program
 
         app.MapControllers();
 
-        app.Run("http://0.0.0.0:8080"); 
+        app.Run(); 
     }
 }
