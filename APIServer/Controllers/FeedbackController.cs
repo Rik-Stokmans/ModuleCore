@@ -12,16 +12,16 @@ namespace Server.Controllers;
 public class FeedbackController(Context context) : ControllerBase
 {
     [HttpPost]
-    [Route("{screenId}/{condition}")]
-    public async Task<ActionResult> CreateLogAsync(string screenId, FeedbackConditions condition)
+    [Route("{screenId}/{condition}/{comment}")]
+    public async Task<ActionResult> CreateLogAsync(string screenId, FeedbackConditions condition, string comment = "")
     {
         //check if the database contains the screenId
         if (!await context.ScreenLocations.AnyAsync(location => location.ScreenId == screenId))
         {
-            return NotFound();
+            return NotFound("screenId not found");
         }
         
-        await context.FeedbackConditions.AddAsync(new Feedback(condition, screenId));
+        await context.FeedbackConditions.AddAsync(new Feedback(condition, screenId, comment));
         await context.SaveChangesAsync();
 
         return Created();
@@ -146,4 +146,65 @@ public class FeedbackController(Context context) : ControllerBase
         return Ok(percentages);
     }
     
+    [Authorize]
+    [HttpGet]
+    [Route("comments/{screenId}/{startDate:datetime}/{endDate:datetime}")]
+    public async Task<ActionResult<List<KeyValuePair<string, int>>>> GetComments(string screenId, DateTime startDate, DateTime endDate)
+    {
+        if (!await context.ScreenLocations.AnyAsync(location => location.ScreenId == screenId))
+        {
+            return NotFound("screenId not found");
+        }
+        
+        // get all the comments for the screenId and filter them by the amount of that comment that exist
+        List<KeyValuePair<string, int>> comments = context.FeedbackConditions
+            .Where(log => log.ScreenId == screenId && log.Comment != "" && log.Time > startDate && log.Time < endDate)
+            .AsEnumerable() // Forces client-side evaluation
+            .GroupBy(log => log.Comment)
+            .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))
+            .OrderByDescending(pair => pair.Value)
+            .ToList();
+
+        
+        return Ok(comments);
+    }
+    
+    [Authorize]
+    [HttpGet]
+    [Route("comments/{startDate:datetime}/{endDate:datetime}")]
+    public async Task<ActionResult<List<KeyValuePair<string, int>>>> GetComments(DateTime startDate, DateTime endDate)
+    {
+        // get all the comments for the screenId and filter them by the amount of that comment that exist
+        List<KeyValuePair<string, int>> comments = context.FeedbackConditions
+            .Where(log => log.Comment != "" && log.Time > startDate && log.Time < endDate)
+            .AsEnumerable() // Forces client-side evaluation
+            .GroupBy(log => log.Comment)
+            .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))
+            .OrderByDescending(pair => pair.Value)
+            .ToList();
+        
+        return Ok(comments);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

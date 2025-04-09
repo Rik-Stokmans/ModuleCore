@@ -7,17 +7,19 @@ namespace LogicLayer.Modules.LoggingModule.Models;
 public class Feedback
 {
     
-    public Feedback(FeedbackConditions condition, string screenId, DateTime time)
+    public Feedback(FeedbackConditions condition, string screenId, DateTime time, string comment = "")
     {
         Condition = condition;
         ScreenId = screenId;
         Time = time;
+        Comment = comment;
     }
 
-    public Feedback(FeedbackConditions condition, string screenId)
+    public Feedback(FeedbackConditions condition, string screenId, string comment = "")
     {
         Condition = condition;
         ScreenId = screenId;
+        Comment = comment;
     }
     
     [Key]
@@ -25,5 +27,6 @@ public class Feedback
     public string ScreenId { get; set; }
     public FeedbackConditions Condition { get; set; }
     public DateTime Time { get; set; } = DateTime.UtcNow;
+    public string Comment { get; set; }
     
 }
