@@ -185,6 +185,82 @@ public class FeedbackController(Context context) : ControllerBase
         
         return Ok(comments);
     }
+    
+    [Authorize]
+    [HttpGet]
+    [Route("percentages/getAll")]
+    //it should return a list of all the screens and their total percentage (0-100 of cleanlyness) and do this for the periods of today, this week, this month
+    public async Task<ActionResult<List<KeyValuePair<string, List<double>>>>> GetAllPercentages()
+    {
+        //get all the screens
+        var screens = await context.ScreenLocations.ToListAsync();
+        
+        //create a list of keyvaluepairs with the screenId and a list of doubles with the percentages
+        List<KeyValuePair<string, List<double>>> percentages = new List<KeyValuePair<string, List<double>>>();
+        
+        foreach (var screen in screens)
+        {
+            var screenId = screen.ScreenId;
+            
+            //get the percentages for today, this week and this month
+            var today = await context.FeedbackConditions.Where(log => log.ScreenId == screenId && log.Time > DateTime.Now.Date).ToListAsync();
+            var thisWeek = await context.FeedbackConditions.Where(log => log.ScreenId == screenId && log.Time > DateTime.Now.Date.AddDays(-7)).ToListAsync();
+            var thisMonth = await context.FeedbackConditions.Where(log => log.ScreenId == screenId && log.Time > DateTime.Now.Date.AddDays(-30)).ToListAsync();
+
+            List<double> percentagesList = [GetTotalPercentageAverage(today), GetTotalPercentageAverage(thisWeek), GetTotalPercentageAverage(thisMonth)];
+            
+            //check if all the percentages are in the range of 0-1
+            percentagesList.ForEach(percentage =>
+            {
+                Console.WriteLine(percentage);
+                //check if the percentage is in the range of 0-1 otherwise set it to 0
+                if (percentage > 1)
+                {
+                    percentage = 1;
+                }
+                else if (percentage < 0)
+                {
+                    percentage = 0;
+                }
+            });
+            
+            //default these to 
+            percentages.Add(new KeyValuePair<string, List<double>>(screenId, percentagesList));
+        }
+        
+        return Ok(percentages);
+    }
+    
+    private double GetTotalPercentageAverage(List<Feedback> feedbackItems)
+    {
+        var total = feedbackItems.Count;
+        
+        if (total == 0)
+        {
+            return 1;
+        }
+        //for each condition, get the percentage of the total
+        
+        //summarize the percentages into a single value
+        double totalValue = 0;
+        
+        foreach (var feedback in feedbackItems)
+        {
+            totalValue += feedback.Condition switch
+            {
+                FeedbackConditions.VeryClean => 1.0,
+                FeedbackConditions.Clean => 0.75,
+                FeedbackConditions.Dirty => 0.50,
+                FeedbackConditions.VeryDirty => 0.0,
+                _ => 0
+            };
+        }
+        
+        //calculate the average
+        var average = totalValue / total;
+        
+        return average;
+    }
 }
 
 
