@@ -11,6 +11,8 @@ namespace Server.Controllers;
 [ApiController]
 public class FeedbackController(Context context) : ControllerBase
 {
+    private static List<KeyValuePair<string, DateTime>> feedbackItems = [];
+    
     [HttpPost]
     [Route("{screenId}/{condition}/{comment}")]
     public async Task<ActionResult> CreateLogAsync(string screenId, FeedbackConditions condition, string comment = "")
@@ -21,8 +23,17 @@ public class FeedbackController(Context context) : ControllerBase
             return NotFound("screenId not found");
         }
         
+        //check if there has been a request in the last 5 seconds
+        var lastRequest = feedbackItems.FirstOrDefault(item => item.Key == screenId);
+        if (lastRequest.Key != null && lastRequest.Value > DateTime.Now.AddSeconds(-5))
+        {
+            return BadRequest("You can only send a request every 5 seconds");
+        }
+        
         await context.FeedbackConditions.AddAsync(new Feedback(condition, screenId, comment));
         await context.SaveChangesAsync();
+        feedbackItems.RemoveAll(item => item.Key == screenId);
+        feedbackItems.Add(new KeyValuePair<string, DateTime>(screenId, DateTime.Now));
 
         return Created();
     }
