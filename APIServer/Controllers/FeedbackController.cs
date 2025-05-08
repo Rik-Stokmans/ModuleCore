@@ -248,7 +248,7 @@ public class FeedbackController(Context context) : ControllerBase
         
         if (total == 0)
         {
-            return 1;
+            return -1.0;
         }
         //for each condition, get the percentage of the total
         
