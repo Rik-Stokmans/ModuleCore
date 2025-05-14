@@ -38,6 +38,54 @@ public class FeedbackController(Context context) : ControllerBase
         return Created();
     }
     
+    //  !!!!TESTING ONLY!!!!!
+    // [HttpPost]
+    // [Route("insertTestData")]
+    // public async Task<ActionResult> InsertTestData()
+    // {
+    //     var comments = new List<string>
+    //     {
+    //         "Technical-Problem", "Long-Line", "Unhygienic", "Amenities-Missing", "No-Comment"
+    //     };
+    //     //create feedback items with a time window of 1 hour and make enough items for 1 week back
+    //     var feedbackItemsList = new List<Feedback>();
+    //     var screenId = /*get all screens*/ await context.ScreenLocations.Select(location => location.ScreenId).ToListAsync();
+    //     var random = new Random();
+    //     var conditions = Enum.GetValues(typeof(FeedbackConditions)).Cast<FeedbackConditions>().ToList();
+    //     var startTime = DateTime.Now.AddDays(-7);
+    //     var endTime = DateTime.Now;
+    //     var timeSpan = endTime - startTime;
+    //     
+    //     foreach (var se in screenId)
+    //     {
+    //         for (var i = 0; i < timeSpan.TotalHours; i++)
+    //         {
+    //             var condition = random.Next(0, 100) switch
+    //             {
+    //                 < 50 => conditions[0],
+    //                 < 75 => conditions[1],
+    //                 < 90 => conditions[2],
+    //                 _ => conditions[3]
+    //             };
+    //             
+    //             var comment = "No-Comment";
+    //             if (condition != 0) {comment = comments[random.Next(0, comments.Count)];}
+    //             var time = startTime.AddHours(i);
+    //             feedbackItemsList.Add(new Feedback(condition, se, comment) { Time = time }); 
+    //         }
+    //     }
+    //     
+    //     
+    //     //remove all database items
+    //     var feedbackItemsListT = await context.FeedbackConditions.ToListAsync();
+    //     context.FeedbackConditions.RemoveRange(feedbackItemsListT);
+    //     
+    //     //add the feedback items to the database
+    //     await context.FeedbackConditions.AddRangeAsync(feedbackItemsList);
+    //     await context.SaveChangesAsync();
+    //     return Created();
+    // }
+    
     [Authorize]
     [HttpGet]
     [Route("{amount:int:range(1,100)}")]
@@ -242,6 +290,57 @@ public class FeedbackController(Context context) : ControllerBase
         return Ok(percentages);
     }
     
+    [Authorize]
+    [HttpGet]
+    [Route("details/{screenId}")]
+    public async Task<ActionResult<FeedbackDetailsView>> GetDetailsAsync(string screenId)
+    {
+        if (!await context.ScreenLocations.AnyAsync(location => location.ScreenId == screenId))
+        {
+            return NotFound("screenId not found");
+        }
+
+        var feedbackItemsList = await context.FeedbackConditions
+            .Where(f => f.ScreenId == screenId)
+            .OrderBy(f => f.Time)
+            .ToListAsync();
+
+        if (feedbackItemsList.Count == 0)
+        {
+            return Ok(new FeedbackDetailsView
+            {
+                ScreenId = screenId,
+                LastActivity = DateTime.MinValue,
+                Feedback = []
+            });
+        }
+
+        var feedback = feedbackItemsList.Select(f => new FeedbackScorePoint
+        {
+            Timestamp = f.Time,
+            Score = f.Condition switch
+            {
+                FeedbackConditions.VeryClean => 1.0,
+                FeedbackConditions.Clean => 0.66,
+                FeedbackConditions.Dirty => 0.33,
+                FeedbackConditions.VeryDirty => 0.0,
+                _ => 0.0
+            },
+            Comment = f.Comment
+        }).ToList();
+
+        var lastActivity = feedbackItemsList.Max(f => f.Time);
+
+        return Ok(new FeedbackDetailsView
+        {
+            ScreenId = screenId,
+            LastActivity = lastActivity,
+            Feedback = feedback
+        });
+    }
+
+
+    
     private double GetTotalPercentageAverage(List<Feedback> feedbackItems)
     {
         var total = feedbackItems.Count;
@@ -260,8 +359,8 @@ public class FeedbackController(Context context) : ControllerBase
             totalValue += feedback.Condition switch
             {
                 FeedbackConditions.VeryClean => 1.0,
-                FeedbackConditions.Clean => 0.75,
-                FeedbackConditions.Dirty => 0.50,
+                FeedbackConditions.Clean => 0.66,
+                FeedbackConditions.Dirty => 0.33,
                 FeedbackConditions.VeryDirty => 0.0,
                 _ => 0
             };
