@@ -10,4 +10,5 @@ public class Location(string screenId)
 
     [Key]
     public string ScreenId { get; set; } = screenId;
+    public string Name { get; set; } = "No Name";
 }

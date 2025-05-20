@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using Server.Seeders;
 
 namespace Server;
 
 public static class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         
@@ -57,11 +58,20 @@ public static class Program
             options.Password.RequireNonAlphanumeric = false;
             options.Password.RequiredLength = 1;
         }).AddEntityFrameworkStores<AccountContext>();
+        
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+        
+        //Roles
+        using (var scope = app.Services.CreateScope())
+        {
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleSeeder = new RoleSeeder(roleManager);
+            await roleSeeder.SeedRolesAsync();
+        }
         
         app.UseCors("AllowAll");
         
