@@ -34,9 +34,6 @@ public static class Program
             options.Cookie.SameSite = SameSiteMode.None;  // 🔥 Required for cross-origin requests
             options.Cookie.Path = "/";
         });
-
-
-
         
         builder.Services.AddDbContext<Context>(options =>
         {
@@ -78,44 +75,14 @@ public static class Program
         // Migrate/Create the database
         using (var scope = app.Services.CreateScope())
         {
-            // Get context from dependency injection
-            // Type or throws: GetRequiredService<Type>();
-            // Type or throws: GetRequiredService(Type);
-            // Type or null: GetService<Type>();
-            // Type or null: GetService(Type);
             var context = scope.ServiceProvider.GetRequiredService<Context>();
             var accountContext = scope.ServiceProvider.GetRequiredService<AccountContext>();
 
-            context.Database.EnsureCreated();
-            accountContext.Database.EnsureCreated();
+            await context.Database.EnsureCreatedAsync();
+            await accountContext.Database.EnsureCreatedAsync();
             
-            // Check if database supports migrations
-            // if (context.Database.IsRelational())
-            // {
-            //     context.Database.Migrate();
-            // }
-            // else
-            // {
-            //     context.Database.EnsureCreated();
-            // }
             
-            // Check if database supports migrations
-            // if (accountContext.Database.IsRelational())
-            // {
-            //     accountContext.Database.Migrate();
-            // }
-            // else
-            // {
-            //     accountContext.Database.EnsureCreated();
-            // }
         }
-
-        // Configure the HTTP request pipeline.
-        // if (app.Environment.IsDevelopment())
-        // {
-        //     app.UseSwagger();
-        //     app.UseSwaggerUI();
-        // }
         
         app.UseSwagger();
         app.UseSwaggerUI();

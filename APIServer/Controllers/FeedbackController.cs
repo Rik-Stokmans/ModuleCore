@@ -14,6 +14,7 @@ public class FeedbackController(Context context) : ControllerBase
     private static readonly List<KeyValuePair<string, DateTime>> FeedbackItems = [];
     public static readonly List<string> AdminScreensIds = ["C2D361003268"]; // Example admin screens
     
+    
     [HttpPost]
     [Route("{screenId}/{condition}/{comment}")]
     public async Task<ActionResult> CreateLogAsync(string screenId, FeedbackConditions condition, string comment = "")
@@ -40,8 +41,6 @@ public class FeedbackController(Context context) : ControllerBase
     }
     
     
-    
-    //USED
     [Authorize]
     [HttpGet]
     [Route("percentages/{startDate:datetime}/{endDate:datetime}")]
@@ -69,8 +68,6 @@ public class FeedbackController(Context context) : ControllerBase
     }
     
  
-    
-    //USED
     [Authorize]
     [HttpGet]
     [Route("percentages/getAll")]
@@ -86,7 +83,7 @@ public class FeedbackController(Context context) : ControllerBase
             screens.RemoveAll(item => AdminScreensIds.Contains(item.ScreenId));
         }
         
-        //create a list of keyvaluepairs with the screenId and a list of doubles with the percentages
+        //create a list of key value pairs with the screenId and a list of doubles with the percentages
         List<KeyValuePair<string, List<double>>> percentages = new List<KeyValuePair<string, List<double>>>();
         
         foreach (var screen in screens)
@@ -122,7 +119,7 @@ public class FeedbackController(Context context) : ControllerBase
         return Ok(percentages);
     }
     
-    //USED
+    
     [Authorize]
     [HttpGet]
     [Route("details/{screenId}")]
@@ -210,193 +207,6 @@ public class FeedbackController(Context context) : ControllerBase
         
         return average;
     }
-    
-    //  !!!!TESTING ONLY!!!!!
-    // [HttpPost]
-    // [Route("insertTestData")]
-    // public async Task<ActionResult> InsertTestData()
-    // {
-    //     var comments = new List<string>
-    //     {
-    //         "Technical-Problem", "Long-Line", "Unhygienic", "Amenities-Missing", "No-Comment"
-    //     };
-    //     //create feedback items with a time window of 1 hour and make enough items for 1 week back
-    //     var feedbackItemsList = new List<Feedback>();
-    //     var screenId = /*get all screens*/ await context.ScreenLocations.Select(location => location.ScreenId).ToListAsync();
-    //     var random = new Random();
-    //     var conditions = Enum.GetValues(typeof(FeedbackConditions)).Cast<FeedbackConditions>().ToList();
-    //     var startTime = DateTime.Now.AddDays(-7);
-    //     var endTime = DateTime.Now;
-    //     var timeSpan = endTime - startTime;
-    //     
-    //     foreach (var se in screenId)
-    //     {
-    //         for (var i = 0; i < timeSpan.TotalHours; i++)
-    //         {
-    //             var condition = random.Next(0, 100) switch
-    //             {
-    //                 < 50 => conditions[0],
-    //                 < 75 => conditions[1],
-    //                 < 90 => conditions[2],
-    //                 _ => conditions[3]
-    //             };
-    //             
-    //             var comment = "No-Comment";
-    //             if (condition != 0) {comment = comments[random.Next(0, comments.Count)];}
-    //             var time = startTime.AddHours(i);
-    //             feedbackItemsList.Add(new Feedback(condition, se, comment) { Time = time }); 
-    //         }
-    //     }
-    //     
-    //     
-    //     //remove all database items
-    //     var feedbackItemsListT = await context.FeedbackConditions.ToListAsync();
-    //     context.FeedbackConditions.RemoveRange(feedbackItemsListT);
-    //     
-    //     //add the feedback items to the database
-    //     await context.FeedbackConditions.AddRangeAsync(feedbackItemsList);
-    //     await context.SaveChangesAsync();
-    //     return Created();
-    // }
-    
-    // [Authorize]
-    // [HttpGet]
-    // [Route("{amount:int:range(1,100)}")]
-    // public async Task<ActionResult<List<FeedbackView>>> GetLogsAsync(int amount = 20)
-    // {
-    //     var feedbackItems = await context.FeedbackConditions.OrderByDescending(log => log.Time).Take(amount).ToListAsync();
-    //     var feedbackItemViews = feedbackItems.Select(feedback => feedback.GetFeedbackView()).ToList();
-    //     
-    //     return Ok(feedbackItemViews);
-    // }
-    //
-    // [Authorize]
-    // [HttpGet]
-    // [Route("{screenId}/{amount:int:range(1,100)}")]
-    // public async Task<ActionResult<List<FeedbackView>>> GetLogsAsync(string screenId, int amount = 20)
-    // {
-    //     //check if the database contains the screenId
-    //     if (!await context.ScreenLocations.AnyAsync(location => location.ScreenId == screenId))
-    //     {
-    //         return NotFound("screenId not found");
-    //     }
-    //     
-    //     var feedbackItems = await context.FeedbackConditions.Where(feedback => feedback.ScreenId == screenId).OrderByDescending(log => log.Time).Take(amount).ToListAsync();
-    //     var feedbackItemViews = feedbackItems.Select(feedback => feedback.GetFeedbackView()).ToList();
-    //     
-    //     return Ok(feedbackItemViews);
-    // }
-    //
-    // [Authorize]
-    // [HttpGet]
-    // [Route("percentages/{screenId}/{daysBack:int:range(1,365)}")]
-    // public async Task<ActionResult<List<KeyValuePair<FeedbackConditions, double>>>> GetPercentages(string screenId, int daysBack = 7)
-    // {
-    //     if (!await context.ScreenLocations.AnyAsync(location => location.ScreenId == screenId))
-    //     {
-    //         return NotFound("screenId not found");
-    //     }
-    //     
-    //     //if the screenId is "all" i want to collect all the condition submitted in the timeframe, otherwise i want only the conditions for the screenId
-    //     var feedbackItems = await context.FeedbackConditions.Where(log => log.Time > DateTime.Now.AddDays(-daysBack) && log.ScreenId == screenId).ToListAsync(); //only screens matching the screenId will be given
-    //     
-    //     var total = feedbackItems.Count;
-    //     //for each condition, get the percentage of the total
-    //     var percentages = feedbackItems.GroupBy(log => log.Condition)
-    //         .Select(group => new KeyValuePair<FeedbackConditions, double>(group.Key, group.Count() / (double) total))
-    //         .ToList();
-    //     
-    //     //order by percentage
-    //     percentages = percentages.OrderByDescending(pair => pair.Value).ToList();
-    //     
-    //     return Ok(percentages);
-    // }
-    //
-    // [Authorize]
-    // [HttpGet]
-    // [Route("percentages/{daysBack:int:range(1,365)}")]
-    // public async Task<ActionResult<List<KeyValuePair<FeedbackConditions, double>>>> GetPercentages(int daysBack = 7)
-    // {
-    //     //if the screenId is "all" i want to collect all the condition submitted in the timeframe, otherwise i want only the conditions for the screenId
-    //     var feedbackItems = await context.FeedbackConditions.Where(log => log.Time > DateTime.Now.AddDays(-daysBack)).ToListAsync(); //only screens matching the screenId will be given
-    //     
-    //     var total = feedbackItems.Count;
-    //     //for each condition, get the percentage of the total
-    //     var percentages = feedbackItems.GroupBy(log => log.Condition)
-    //         .Select(group => new KeyValuePair<FeedbackConditions, double>(group.Key, group.Count() / (double) total))
-    //         .ToList();
-    //     
-    //     //order by percentage
-    //     percentages = percentages.OrderByDescending(pair => pair.Value).ToList();
-    //     
-    //     return Ok(percentages);
-    // }
-    //
-    // //the same method as the percentages but then with a date range
-    // [Authorize]
-    // [HttpGet]
-    // [Route("percentages/{screenId}/{startDate:datetime}/{endDate:datetime}")]
-    // public async Task<ActionResult<List<KeyValuePair<FeedbackConditions, double>>>> GetPercentages(string screenId, DateTime startDate, DateTime endDate)
-    // {
-    //     if (!await context.ScreenLocations.AnyAsync(location => location.ScreenId == screenId))
-    //     {
-    //         return NotFound("screenId not found");
-    //     }
-    //     
-    //     //if the screenId is "all" i want to collect all the condition submitted in the timeframe, otherwise i want only the conditions for the screenId
-    //     var feedbackItems = await context.FeedbackConditions.Where(log => log.Time > startDate && log.Time < endDate && log.ScreenId == screenId).ToListAsync(); //only screens matching the screenId will be given
-    //     
-    //     var total = feedbackItems.Count;
-    //     //for each condition, get the percentage of the total
-    //     var percentages = feedbackItems.GroupBy(log => log.Condition)
-    //         .Select(group => new KeyValuePair<FeedbackConditions, double>(group.Key, group.Count() / (double) total))
-    //         .ToList();
-    //     
-    //     //order by percentage
-    //     percentages = percentages.OrderByDescending(pair => pair.Value).ToList();
-    //     
-    //     return Ok(percentages);
-    // }
-    
-    // [Authorize]
-    // [HttpGet]
-    // [Route("comments/{screenId}/{startDate:datetime}/{endDate:datetime}")]
-    // public async Task<ActionResult<List<KeyValuePair<string, int>>>> GetComments(string screenId, DateTime startDate, DateTime endDate)
-    // {
-    //     if (!await context.ScreenLocations.AnyAsync(location => location.ScreenId == screenId))
-    //     {
-    //         return NotFound("screenId not found");
-    //     }
-    //     
-    //     // get all the comments for the screenId and filter them by the amount of that comment that exist
-    //     List<KeyValuePair<string, int>> comments = context.FeedbackConditions
-    //         .Where(log => log.ScreenId == screenId && log.Comment != "" && log.Time > startDate && log.Time < endDate)
-    //         .AsEnumerable() // Forces client-side evaluation
-    //         .GroupBy(log => log.Comment)
-    //         .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))
-    //         .OrderByDescending(pair => pair.Value)
-    //         .ToList();
-    //
-    //     
-    //     return Ok(comments);
-    // }
-    //
-    // [Authorize]
-    // [HttpGet]
-    // [Route("comments/{startDate:datetime}/{endDate:datetime}")]
-    // public async Task<ActionResult<List<KeyValuePair<string, int>>>> GetComments(DateTime startDate, DateTime endDate)
-    // {
-    //     // get all the comments for the screenId and filter them by the amount of that comment that exist
-    //     List<KeyValuePair<string, int>> comments = context.FeedbackConditions
-    //         .Where(log => log.Comment != "" && log.Time > startDate && log.Time < endDate)
-    //         .AsEnumerable() // Forces client-side evaluation
-    //         .GroupBy(log => log.Comment)
-    //         .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))
-    //         .OrderByDescending(pair => pair.Value)
-    //         .ToList();
-    //     
-    //     return Ok(comments);
-    // }
 }
 
 
