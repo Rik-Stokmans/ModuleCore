@@ -23,10 +23,10 @@ public class AccountController(AccountContext accountContext, SignInManager<Iden
         };
         
         
+        var result = await userManager.CreateAsync(user, password);
+        
         //add the user to the user role
         await userManager.AddToRoleAsync(user, "User");
-        
-        var result = await userManager.CreateAsync(user, password);
         
         if (result.Succeeded)
         {
@@ -71,6 +71,28 @@ public class AccountController(AccountContext accountContext, SignInManager<Iden
         }
         
         var result = await userManager.AddToRoleAsync(user, role);
+        
+        if (result.Succeeded)
+        {
+            return Ok();
+        }
+        
+        return BadRequest();
+    }
+    
+    [Route("RemoveUser")]
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> RemoveUserAsync(string email)
+    {
+        var user = await userManager.FindByEmailAsync(email);
+        
+        if (user == null)
+        {
+            return NotFound();
+        }
+        
+        var result = await userManager.DeleteAsync(user);
         
         if (result.Succeeded)
         {
