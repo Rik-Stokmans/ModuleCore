@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Text.Json;
 using LogicLayer.CoreModels;
 using LogicLayer.Modules.LoggingModule;
+using LogicLayer.Modules.LoggingModule.Interfaces;
 using LogicLayer.Modules.LoggingModule.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace FunctionApi.Generated
      }
 
 
-    public class CreateLogFunction(ILogger<CreateLogFunction> logger)
+    public class CreateLogFunction(ILogger<CreateLogFunction> logger, ILogService logService)
     {
         [Function("CreateLog")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)

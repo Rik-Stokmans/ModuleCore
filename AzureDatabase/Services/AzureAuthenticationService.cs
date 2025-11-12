@@ -1,6 +1,7 @@
 using AzureDatabase.Interfaces;
 using LogicLayer.Authentication.Interfaces;
 using LogicLayer.CoreModels;
+using LogicLayer.Modules.LoggingModule.Interfaces;
 using Microsoft.Data.SqlClient;
 
 namespace AzureDatabase.Services;
